@@ -10,15 +10,13 @@ CPU architecture built using Minecraft redstone and the Create mod, along with a
 The CPU uses Harvard architecture, with separate instruction and data memory. Data memory consists of 16 cells, of size 1 byte. Instruction memory consists of 32 cells, of size 2 bytes. There are 16 general purpose registers, as well as an expandable "secondary storage", which consists of blocks of 16 instructions at a time. The player specifies the start and end block of a given program, and presses a button to start execution. Demand paging is used to load blocks into instruction memory, which consists of 2 page frames.
 
 ## Instruction Set
-The instruction set of the CPU and the instruction set accepted by the assembler are different. The CPU uses load-store architecture, whereas the assembler accepts immediate addressing modes and converts this into a form accepted by the CPU. I also programmed the assembler to accept more variety in branch instructions.
-
-## Assembler
-The python assembler takes in a text file with instructions written one per line. It converts any immediate operands with a register reference, adding new load instructions if necessary. It also converts branches to one of the two types accepted by hardware. A converted version of assembly language is printed to console, and the machine code is written to a new text file at "original name"_converted.txt.
+The instruction set of the CPU and the instruction set accepted by the assembler are different. The CPU uses load-store architecture, whereas the assembler accepts immediate addressing modes and converts this into a form accepted by the CPU. I also programmed the assembler to accept more variety in branch instructions.\
+The assembler takes in a text file with instructions written one per line. It replaces any immediate operands with a register reference, adding new load instructions if necessary. It also converts branches to one of the two types accepted by hardware. A converted version of assembly language is printed to console, and the machine code is written to a new text file at "original name"_converted.txt.
 
 ### Instruction Set Accepted by Assembler:
-op1, op2, etc. refers to operands that should be either: Rx (a.k.a the value in Register number x) or #x (immediate integer value x (base 10)).\
-labels should be used before an instruction, for example, loop: ADD R1, R2, R3.\
-Example programs can be seen in the programs folder.
+- op1, op2, etc. refers to operands that should be either: Rx (a.k.a the value in Register number x) or #x (immediate integer value x (base 10)).\
+- Labels should be used before an instruction, for example, loop: ADD R1, R2, R3.\
+- Example programs can be seen in the programs folder.
 
 ADD R1, op1, op2        - Adds values from op1 and op2, storing result in R1\
 SUB R1, op1, op2        - Subtracts op2 from op1, storing result in R1\
