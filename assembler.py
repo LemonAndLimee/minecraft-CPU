@@ -32,6 +32,7 @@ for i in range(1, NUMBER_OF_REGISTERS):
 
 immediate_registers = {}
 '''Stores all registers that are written to only with LDIs before the first branch of the program. (All of them if there are no branches).
+These are the registers which are suitable to replace immediate operands, as the values in them won't change.
 key:value pairs are in the form, register number : RegisterInfo() instance
 '''
 
