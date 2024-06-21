@@ -28,10 +28,10 @@ LD R1, op1              - Loads value from data memory, pointed to by op1, then 
 LDI R1, #32             - Loads constant 32 (base 10), storing in R1\
 STR R1, op1             - Writes value in R1 to data memory, at the address pointed to by op1\
 BRU label               - Branches unconditionally to instruction at label\
-BRE label, op1, op2     - Branches to instruction at label\ if op1 == op2\
-BRLT label, op1, op2    - Branches to instruction at label\ if op1 < op2\
-BRGT label, op1, op2    - Branches to instruction at label\ if op1 > op2\
-BRZ label, op1          - Branches to instruction at label\ if op1 == 0
+BRE label, op1, op2     - Branches to instruction at label if op1 == op2\
+BRLT label, op1, op2    - Branches to instruction at label if op1 < op2\
+BRGT label, op1, op2    - Branches to instruction at label if op1 > op2\
+BRZ label, op1          - Branches to instruction at label if op1 == 0
 
 ### Instruction Set Accepted by CPU Hardware
 ADD R1, R2, R3      - Adds values from R2 and R3, storing result in R1\
