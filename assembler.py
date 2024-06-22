@@ -56,8 +56,9 @@ def read_file_into_list(filename:str) -> list:
     with open("programs/" + filename + ".txt", 'r') as input_file:
         for line in input_file:
             line = line[:-1] if line[-1] == '\n' else line
-            parts = re.split(" |, ", line)
-            results.append(parts)
+            if len(line) > 0:
+                parts = re.split(" |, ", line)
+                results.append(parts)
     return results
 
 def begins_with_label(instruction:list) -> bool:
@@ -374,8 +375,19 @@ def convert_branch_labels(instructions:list) -> None:
                 existing_register = find_existing_immediate_register(immediate_value=mem_cell, instruction_cycle=instruction_cycle)
                 replace_operand(instructions, instr_cycle=instruction_cycle, op_index=operand_index, new_value=f"R{existing_register}")
 
+def remove_comments(instructions:list) -> None:
+    '''Removes any comment lines that begin with a //'''
+    instr_index = 0
+    while instr_index < len(instructions):
+        instruction = instructions[instr_index]
+        if instruction[0][0:2] == "//":
+            instructions.pop(instr_index)
+        else:
+            instr_index += 1
+
 def convert_syntax(instructions:list) -> None:
     '''Converts instructions into correct syntax, on a 1-1 relationship with the machine code.'''
+    remove_comments(instructions)
     scan_for_immediate_registers(instructions)
     remove_zero_ldis(instructions)
     convert_custom_branches(instructions)

@@ -1,0 +1,25 @@
+// Generates the first x numbers in the Fibonacci sequence, storing them in memory.
+// x is defined in the first line in register 1.
+
+LDI R1, #6
+// Let R2 be a counter
+LDI R2, #3
+// Let R3 and R4 contain the two values
+LDI R3, #1
+LDI R4, #1
+
+STR R3, #17
+STR R4, #18
+
+// R5 is a temporary total holder - calculate R3 + R4
+loop: ADD R5, R3, R4
+// Shift all the values across, so R3 goes into R4, and R5 into R3
+ADD R4, R3, #0
+ADD R3, R5, #0
+// Calculate memory address and store in R6
+ADD R6, R2, #16
+// Store latest value in memory
+STR R5, R6
+// Increments counter and branches back to loop if < x
+ADD R2, R2, #1
+BRLT loop, R2, R1
