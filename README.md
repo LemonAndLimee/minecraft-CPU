@@ -14,8 +14,8 @@ The instruction set of the CPU and the instruction set accepted by the assembler
 The assembler takes in a text file with instructions written one per line. It replaces any immediate operands with a register reference, adding new load instructions if necessary. It also converts branches to one of the two types accepted by hardware. A converted version of assembly language is printed to console, and the machine code is written to a new text file at "original name"_converted.txt.
 
 ### Instruction Set Accepted by Assembler:
-- op1, op2, etc. refers to operands that should be either: Rx (a.k.a the value in Register number x) or #x (immediate integer value x (base 10)).\
-- Labels should be used before an instruction, for example, loop: ADD R1, R2, R3.\
+- op1, op2, etc. refers to operands that should be either: Rx (a.k.a the value in Register number x) or #x (immediate integer value x (base 10)).
+- Labels should be used before an instruction, for example, loop: ADD R1, R2, R3.
 - Example programs can be seen in the programs folder.
 
 ADD R1, op1, op2        - Adds values from op1 and op2, storing result in R1\
