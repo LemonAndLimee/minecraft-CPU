@@ -7,7 +7,7 @@ CPU architecture built using Minecraft redstone and the Create mod, along with a
 ![Image of the minecraft build](images/cpu4.png)
 
 ## Architecture
-The CPU uses Harvard architecture, with separate instruction and data memory. Data memory consists of 16 cells, of size 1 byte. Instruction memory consists of 32 cells, of size 2 bytes. There are 16 general purpose registers, as well as an expandable "secondary storage", which consists of blocks of 16 instructions at a time. The player specifies the start and end block of a given program, and presses a button to start execution. Demand paging is used to load blocks into instruction memory, which consists of 2 page frames.
+The CPU uses Harvard architecture, with separate instruction and data memory. Data memory currently consists of 60 cells, of size 1 byte. Instruction memory consists of 30 cells, of size 2 bytes. There are 15 general purpose registers, as well as an expandable "secondary storage", which consists of blocks of 15 instructions at a time. The player specifies the start and end block of a given program, and presses a button to start execution. Demand paging is used to load blocks into instruction memory, which consists of 2 page frames.
 
 ## Instruction Set
 The instruction set of the CPU and the instruction set accepted by the assembler are different. The CPU uses load-store architecture, whereas the assembler accepts immediate addressing modes and converts this into a form accepted by the CPU. I also programmed the assembler to accept more variety in branch instructions.\
