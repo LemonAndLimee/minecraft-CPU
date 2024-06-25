@@ -1,7 +1,7 @@
 // Generates the first x numbers in the Fibonacci sequence, storing them in memory.
 // x is defined in the first line in register 1.
 
-LDI R1, #6
+LDI R1, #15
 // Let R2 be a counter
 LDI R2, #3
 // Let R3 and R4 contain the two values

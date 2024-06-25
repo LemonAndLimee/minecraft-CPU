@@ -448,7 +448,7 @@ def convert_to_machine_code(instructions:list) -> None:
     pad_to_equal_width(instructions)
 
 def write_to_file(instructions:list, filename:str) -> None:
-    with open("programs/" + filename + "_converted.txt", 'w') as output_file:
+    with open("programs/machine code/" + filename + "_converted.txt", 'w') as output_file:
         instrs_output = []
         counter = 0
         for instruction in instructions:

@@ -45,3 +45,6 @@ LDI R1, #32         - Loads constant 32 (base 10), storing in R1\
 STR R1, R2          - Writes value in R1 to data memory, at the address pointed to by the value in R2\
 BRE R1, R2, R3      - Branches to instruction at address pointed to by value in R1 if value in R2 == value in R3\
 BRLT R1, R2, R3     - Branches to instruction at address pointed to by value in R1 if value in R2 < value in R3
+
+## Schematics
+The python script schematic_generator.py converts machine code text files to a schematic that can be used by the WorldEdit mod to spawn in the whole program at once, in the form of barrels with various redstone signal strengths. This increases efficiency in testing out programs, as they can be written into the world immediately. To use, run the script on the terminal with the name of the machine code file (omitting the .txt) as an argument. This produces a .schem file in the schematics folder, which can be transferred into the WorldEdit folder in the Minecraft folder to load it into the world.
