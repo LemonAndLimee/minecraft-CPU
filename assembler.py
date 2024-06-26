@@ -5,18 +5,19 @@ NUMBER_OF_REGISTERS = 15
 OPCODES = {
     "ADD":1,
     "SUB":2,
-    "AND":3,
-    "OR":4,
+    "NOT":3,
+    "AND":4,
+    "OR":5,
     
-    "LS":5,
-    "RS":6,
+    "LS":6,
+    "RS":7,
     
-    "LD":7,
-    "LDI":8,
-    "STR":9,
+    "LD":8,
+    "LDI":9,
+    "STR":10,
     
-    "BRE":10,
-    "BRLT":11
+    "BRE":11,
+    "BRLT":12
 }
 '''Dict of opcodes in the form "STR":opcode'''
 
@@ -414,7 +415,7 @@ def convert_operands(instructions:list) -> None:
             #if operand value fits into 1 bit, replace operand with the value
             if operand_value <= 15:
                 #if instruction is an LDI, final operand value must be in the second bit, in the form 0, x
-                if instruction[0] == 8 and operand_index == 2:
+                if instruction[0] == OPCODES["LDI"] and operand_index == 2:
                     instructions[instruction_cycle][operand_index] = 0
                     instructions[instruction_cycle].append(operand_value)
                 #otherwise it can replace the initial operand position
@@ -423,7 +424,7 @@ def convert_operands(instructions:list) -> None:
             #if operand is larger than 1 bit
             else:
                 #if instruction is an LDI, split the value over 2 operands
-                if instruction[0] == 8:
+                if instruction[0] == OPCODES["LDI"]:
                     hex_version = hex(operand_value)
                     digit_1 = int(hex_version[2], 16)
                     digit_2 = int(hex_version[3], 16)

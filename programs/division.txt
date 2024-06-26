@@ -1,7 +1,7 @@
 // Performs division: R1 / R2
 // Writes DIV result in memory 0x11, writes MOD result in memory 0x12.
 
-LDI R1, #12
+LDI R1, #25
 LDI R2, #4
 
 // R3 = a counter to count the DIV result
