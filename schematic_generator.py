@@ -62,7 +62,7 @@ SIGNAL_STRENGTH_LOWER_BOUNDS = {
 def read_file_into_list(filename:str) -> list:
     '''Reads machine code file into list of instructions. Each instruction is a list of 4 integers.'''
     results = []
-    with open("programs/" + filename + "_converted.txt", 'r') as input_file:
+    with open("programs/machine code/" + filename + "_converted.txt", 'r') as input_file:
         for line in input_file:
             line = line[:-1] if line[-1] == '\n' else line
             parts = re.split(" ", line)
