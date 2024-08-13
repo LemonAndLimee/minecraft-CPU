@@ -1,0 +1,50 @@
+{
+    "token_regex_patterns": {
+        "TYPE": "(char)|(bool)",
+        "ASSIGN": "=",
+        "CHAR": "[0-9]+|('.|\n')",
+        "BOOL": "(True)|(False)",
+
+        "IF": "if",
+        "ELSE": "else",
+        "WHILE": "while",
+        "FOR": "for",
+
+        "ID": "[a-zA-Z_][a-zA-Z_0-9]*",
+
+        "ARITHMETIC": "[+]|-|/|[*]|^|%",
+        "LOGICAL": "(==)|(!=)|(<=)|(>=)|<|>|!|([|][|])|(&&)",
+
+        "(": "[(]",
+        ")": "[)]",
+        "{": "{",
+        "}": "}",
+        ";": ";",
+
+        "WHITESPACE": "\n|\t| "
+    },
+    "stores_value": {
+        "TYPE": 1,
+        "ID": 1,
+        "ASSIGN": 0,
+        "CHAR": 1,
+        "BOOL": 1,
+
+        "IF": 0,
+        "ELSE": 0,
+        "WHILE": 0,
+        "FOR": 0,
+
+        "ARITHMETIC": 1,
+        "LOGICAL": 1,
+
+        "(": 0,
+        ")": 0,
+        "{": 0,
+        "}": 0,
+        ";": 0,
+
+        "WHITESPACE":0
+    }
+
+}

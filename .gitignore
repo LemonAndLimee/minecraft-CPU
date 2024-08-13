@@ -1,1 +1,4 @@
 .DS_store
+*/__pycache__
+
+planning.txt
