@@ -51,17 +51,17 @@ class TestGetTokenType(unittest.TestCase):
     
     def test_get_token_type_arithmetic(self):
         token_type = la.get_token_type("+")
-        self.assertEqual(token_type, "ARITHMETIC", "get_token_type() failed on input '+'")
+        self.assertEqual(token_type, "PLUS_MINUS", "get_token_type() failed on input '+'")
         token_type = la.get_token_type("-")
-        self.assertEqual(token_type, "ARITHMETIC", "get_token_type() failed on input '-'")
+        self.assertEqual(token_type, "PLUS_MINUS", "get_token_type() failed on input '-'")
         token_type = la.get_token_type("*")
-        self.assertEqual(token_type, "ARITHMETIC", "get_token_type() failed on input '*'")
+        self.assertEqual(token_type, "MULT_DIVIDE", "get_token_type() failed on input '*'")
         token_type = la.get_token_type("/")
-        self.assertEqual(token_type, "ARITHMETIC", "get_token_type() failed on input '/'")
+        self.assertEqual(token_type, "MULT_DIVIDE", "get_token_type() failed on input '/'")
         token_type = la.get_token_type("^")
-        self.assertEqual(token_type, "ARITHMETIC", "get_token_type() failed on input '^'")
+        self.assertEqual(token_type, "EXP", "get_token_type() failed on input '^'")
         token_type = la.get_token_type("%")
-        self.assertEqual(token_type, "ARITHMETIC", "get_token_type() failed on input '%'")
+        self.assertEqual(token_type, "MOD", "get_token_type() failed on input '%'")
     
     def test_get_token_type_logical(self):
         token_type = la.get_token_type("==")
@@ -187,8 +187,8 @@ class TestConvertIntoTokens(unittest.TestCase):
         types = []
         for token in tokens:
             types.append(token.type)
-        expected_types = ["TYPE", "ID", "ASSIGN", "ID", "ARITHMETIC", "(", "CHAR",
-                          "ARITHMETIC", "ID", "ARITHMETIC", "CHAR", ")", ";"]
+        expected_types = ["TYPE", "ID", "ASSIGN", "ID", "PLUS_MINUS", "(", "CHAR",
+                          "MULT_DIVIDE", "ID", "PLUS_MINUS", "CHAR", ")", ";"]
         self.assertListEqual(types, expected_types)
 
     def test_convert_single_token_line(self):
@@ -217,7 +217,7 @@ class TestConvertIntoTokens(unittest.TestCase):
             types.append(token.type)
         expected_types = [
             "FOR", "(", "TYPE", "ID", "ASSIGN", "CHAR", ";", "ID", "LOGICAL",
-            "CHAR", ";", "ID", "ASSIGN", "ID", "ARITHMETIC", "CHAR", ")", "{"
+            "CHAR", ";", "ID", "ASSIGN", "ID", "PLUS_MINUS", "CHAR", ")", "{"
             ]
         self.assertListEqual(types, expected_types)
 
@@ -237,9 +237,9 @@ class TestConvertIntoTokens(unittest.TestCase):
         expected_types = [
             "TYPE", "ID", "ASSIGN", "CHAR", ";",
             "FOR", "(", "TYPE", "ID", "ASSIGN", "CHAR", ";", "ID", "LOGICAL",
-            "CHAR", ";", "ID", "ASSIGN", "ID", "ARITHMETIC", "CHAR", ")", "{",
-            "IF", "(", "ID", "ARITHMETIC", "CHAR", "LOGICAL", "CHAR", ")", "{",
-            "ID", "ASSIGN", "ID", "ARITHMETIC", "ID", ";",
+            "CHAR", ";", "ID", "ASSIGN", "ID", "PLUS_MINUS", "CHAR", ")", "{",
+            "IF", "(", "ID", "MOD", "CHAR", "LOGICAL", "CHAR", ")", "{",
+            "ID", "ASSIGN", "ID", "PLUS_MINUS", "ID", ";",
             "}", "}"
         ]
         self.assertListEqual(types, expected_types)

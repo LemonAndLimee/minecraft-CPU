@@ -12,7 +12,11 @@
 
         "ID": "[a-zA-Z_][a-zA-Z_0-9]*",
 
-        "ARITHMETIC": "\\+|-|/|\\*|\\^|%",
+        "PLUS_MINUS": "\\+|-",
+        "MULT_DIVIDE": "/|\\*",
+        "MOD": "%",
+        "EXP": "\\^",
+
         "LOGICAL": "(==)|(!=)|(<=)|(>=)|<|>|!|(\\|\\|)|(&&)",
 
         "(": "\\(",
@@ -35,7 +39,10 @@
         "WHILE": 0,
         "FOR": 0,
 
-        "ARITHMETIC": 1,
+        "PLUS_MINUS": 1,
+        "MULT_DIVIDE": 1,
+        "MOD": 0,
+        "EXP": 0,
         "LOGICAL": 1,
 
         "(": 0,

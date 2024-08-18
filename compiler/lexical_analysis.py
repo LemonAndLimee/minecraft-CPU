@@ -7,7 +7,7 @@ for index in reversed(range(len(__file__))):
         current_dir = __file__[:index]
         break
 
-TOKEN_TYPES_JSON_FILE = current_dir + "/token_types.json"
+TOKEN_TYPES_JSON_FILE = current_dir + "/definition_files/token_types.json"
 
 class Token:
     '''Class used to hold info about a lexical token. Contains a token type, and an optional value.'''
@@ -54,7 +54,8 @@ def convert_into_tokens(input) -> list[Token]:
     if type(input) == str:
         line = input
         tokens = []
-        if len(line) == 0:
+        # if empty line or commented line, return no tokens
+        if len(line) == 0 or line[:2] == "//":
             return tokens
 
         start_pointer = 0 # start of substring, inclusive
