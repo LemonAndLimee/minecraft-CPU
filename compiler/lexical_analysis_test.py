@@ -147,9 +147,9 @@ class TestCreateToken(unittest.TestCase):
         created_token = la.create_token(string="var1", token_type="ID")
         self.assertEqual(created_token.type, "ID", "create_token() type failed on input 'var1'")
         self.assertEqual(created_token.value, "var1", "create_token() value failed on input 'var1'")
-    def test_create_arithmetic(self):
-        created_token = la.create_token(string="+", token_type="ARITHMETIC")
-        self.assertEqual(created_token.type, "ARITHMETIC", "create_token() type failed on input '+'")
+    def test_create_plus(self):
+        created_token = la.create_token(string="+", token_type="PLUS_MINUS")
+        self.assertEqual(created_token.type, "PLUS_MINUS", "create_token() type failed on input '+'")
         self.assertEqual(created_token.value, "+", "create_token() value failed on input '+'")
     def test_create_logical(self):
         created_token = la.create_token(string="==", token_type="LOGICAL")
@@ -207,6 +207,15 @@ class TestConvertIntoTokens(unittest.TestCase):
         for token in tokens:
             types.append(token.type)
         expected_types = ["CHAR"]
+        self.assertListEqual(types, expected_types)
+    
+    def test_convert_comment(self):
+        line = "// this is a commented line"
+        tokens = la.convert_into_tokens(line)
+        types = []
+        for token in tokens:
+            types.append(token.type)
+        expected_types = []
         self.assertListEqual(types, expected_types)
     
     def test_convert_for_loop_line(self):
