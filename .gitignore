@@ -1,4 +1,6 @@
 .DS_store
-*/__pycache__
+compiler/__pycache__
+.vscode
+*/.pytest_cache
 
 planning.txt

@@ -1,7 +1,13 @@
 import re
 import json
 
-TOKEN_TYPES_JSON_FILE = "compiler/token_types.json"
+current_dir = ""
+for index in reversed(range(len(__file__))):
+    if __file__[index] == '/':
+        current_dir = __file__[:index]
+        break
+
+TOKEN_TYPES_JSON_FILE = current_dir + "/token_types.json"
 
 class Token:
     '''Class used to hold info about a lexical token. Contains a token type, and an optional value.'''
@@ -19,70 +25,85 @@ with open(TOKEN_TYPES_JSON_FILE, 'r') as f:
 
 def get_token_type(string:str) -> str:
     '''Returns token type if string is valid token, None otherwise.'''
-    for type in TOKEN_TYPES["token_regex_patterns"]:
-        pattern = TOKEN_TYPES["token_regex_patterns"][type]
+    for type in TOKEN_TYPES["regex_patterns"]:
+        pattern = TOKEN_TYPES["regex_patterns"][type]
+        
         if re.fullmatch(pattern=pattern, string=string) != None:
             return type
     return None
 
-def create_token(string:str, token_type:str):
+def create_token(string:str, token_type:str) ->Token:
     '''Takes a string and a token type, and returns an equivalent token.'''
     store_value = bool(TOKEN_TYPES["stores_value"][token_type])
-    if store_value:
+    if store_value == 1:
         token = Token(type=token_type, value=string)
     else:
         token = Token(type=token_type)
     return token
 
-def convert_line_into_tokens(line:str) -> list:
-    '''Converts a single line of code into a list of tokens.'''
-    tokens = []
-    if len(line) == 0:
-        return tokens
+def get_non_whitespace_tokens(tokens:list[Token]) ->list[Token]:
+    '''Takes a list of tokens and returns it without any whitespace tokens.'''
+    new_list = []
+    for token in tokens:
+        if token.type != "WHITESPACE":
+            new_list.append(token)
+    return new_list
 
-    start_pointer = 0 # start of substring, inclusive
-    end_pointer = 1 # end of substring, exclusive
+def convert_into_tokens(input) -> list[Token]:
+    '''Converts a line or list of lines of code into a list of tokens, ignoring whitespace.'''
+    if type(input) == str:
+        line = input
+        tokens = []
+        if len(line) == 0:
+            return tokens
 
-    last_successful_pointer = None
+        start_pointer = 0 # start of substring, inclusive
+        end_pointer = 1 # end of substring, exclusive
 
-    while end_pointer < len(line)+1:
-        substring = line[start_pointer:end_pointer]
-        token_type = get_token_type(substring)
-        if token_type != None:
-            last_successful_pointer = end_pointer
-        else:
-            # if there was a previously successful token, convert that then continue from current character
-            if last_successful_pointer != None:
-                token_string = line[start_pointer:last_successful_pointer]
-                token_type = get_token_type(token_string)
-                token = create_token(string=token_string, token_type=token_type)
+        last_successful_pointer = None
+
+        while end_pointer < len(line)+1:
+            substring = line[start_pointer:end_pointer]
+            token_type = get_token_type(substring)
+            if token_type != None:
+                last_successful_pointer = end_pointer
+            else:
+                # if there was a previously successful token, convert that then continue from current character
+                if last_successful_pointer != None:
+                    token_string = line[start_pointer:last_successful_pointer]
+                    token_type = get_token_type(token_string)
+                    token = create_token(string=token_string, token_type=token_type)
+                    tokens.append(token)
+                    # reset pointers
+                    start_pointer = last_successful_pointer
+                    end_pointer = start_pointer
+                    last_successful_pointer = None
+
+            end_pointer += 1
+        
+        # after scanning, there should be one token left at the end, unless the string only had 1
+        # if the remaining string is not a valid token, throw an exception
+        remaining_string = line[start_pointer:end_pointer]
+        if len(remaining_string) > 0:
+            token_type = get_token_type(remaining_string)
+            if token_type != None:
+                token = create_token(string=remaining_string, token_type=token_type)
                 tokens.append(token)
-                # reset pointers
-                start_pointer = last_successful_pointer
-                end_pointer = start_pointer
-                last_successful_pointer = None
+            else:
+                raise Exception(f"Invalid token(s) on following line:\n\t{line}")
 
-        end_pointer += 1
+        non_whitespace_list = get_non_whitespace_tokens(tokens)
+
+        return non_whitespace_list
     
-    # after scanning, there should be one token left at the end
-    # if the remaining string is not a valid token, throw an exception
-    remaining_string = line[start_pointer:end_pointer]
-    token_type = get_token_type(remaining_string)
-    print(f"remaining str= '{remaining_string}', type = {token_type}\n\tstart end= {start_pointer} {end_pointer}")
-    if token_type != None:
-        token = create_token(string=remaining_string, token_type=token_type)
-        print(f"\tcreate token: '{token_string}', type: {token_type}")
-        tokens.append(token)
+    elif type(input) == list:
+        lines = input
+        tokens = []
+        for line in lines:
+            line_tokens = convert_into_tokens(line)
+            tokens.extend(line_tokens)
+        
+        return tokens
+    
     else:
-        raise Exception(f"Invalid token(s) on following line:\n\t{line}")
-
-    return tokens
-
-def convert_lines_of_code_into_tokens(lines:list) -> list:
-    '''Takes a list of lines of code, returns list of tokens.'''
-    tokens = []
-    for line in lines:
-        line_tokens = convert_line_into_tokens(line)
-        tokens.extend(line_tokens)
-    
-    return tokens
+        raise Exception("Invalid input type: must be str or list")
