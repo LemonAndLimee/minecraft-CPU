@@ -33,7 +33,7 @@ def get_token_type(string:str) -> str:
     return None
 
 def create_token(string:str, token_type:str) ->Token:
-    '''Takes a string and a token type, and returns an equivalent token.'''
+    '''Takes a string and a token type, and returns an equivalent token. If store_value == 1, store that value.'''
     store_value = bool(TOKEN_TYPES["stores_value"][token_type])
     if store_value == 1:
         token = Token(type=token_type, value=string)

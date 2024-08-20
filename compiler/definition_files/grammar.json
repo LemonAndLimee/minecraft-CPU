@@ -1,0 +1,30 @@
+{
+    "comment_": [
+        "The grammar uses list items instead of OR, and <> to refer to a token type.",
+        "A rule should only be <T>, NT <T> NT or NT, with bracket/semi-colons allowed as they aren't part of the tree."
+    ],
+    "grammar": {
+        "expression": [
+            "term <PLUS_MINUS> term",
+            "term"
+        ],
+        "term": [
+            "exp_factor <MULT_DIVIDE> exp_factor",
+            "exp_factor <MOD> exp_factor",
+            "exp_factor"
+        ],
+        "exp_factor":[
+            "factor <EXP> factor",
+            "factor"
+        ],
+        "factor": [
+            "terminal",
+            "<(> expression <)>"
+        ],
+        "terminal": [
+            "<ID>", 
+            "<CHAR>", 
+            "<BOOL>"
+        ]
+    }
+}
