@@ -79,9 +79,19 @@ class TestGetTokenType(unittest.TestCase):
         token_type = la.get_token_type("!")
         self.assertEqual(token_type, "NOT", "get_token_type() failed on input '!'")
         token_type = la.get_token_type("||")
-        self.assertEqual(token_type, "LOGICAL_OP", "get_token_type() failed on input '||'")
+        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '||'")
         token_type = la.get_token_type("&&")
-        self.assertEqual(token_type, "LOGICAL_OP", "get_token_type() failed on input '&&'")
+        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '&&'")
+
+    def test_get_token_type_bitwise(self):
+        token_type = la.get_token_type("|")
+        self.assertEqual(token_type, "BITWISE_OP", "get_token_type() failed on input '|'")
+        token_type = la.get_token_type("&")
+        self.assertEqual(token_type, "BITWISE_OP", "get_token_type() failed on input '&'")
+        token_type = la.get_token_type(">>")
+        self.assertEqual(token_type, "BITWISE_SHIFT", "get_token_type() failed on input '>>'")
+        token_type = la.get_token_type("<<")
+        self.assertEqual(token_type, "BITWISE_SHIFT", "get_token_type() failed on input '<<'")
 
     def test_get_token_type_parentheses(self):
         token_type = la.get_token_type("(")
@@ -151,10 +161,14 @@ class TestCreateToken(unittest.TestCase):
         created_token = la.create_token(string="+", token_type="PLUS_MINUS")
         self.assertEqual(created_token.type, "PLUS_MINUS", "create_token() type failed on input '+'")
         self.assertEqual(created_token.value, "+", "create_token() value failed on input '+'")
-    def test_create_logical(self):
+    def test_create_comparison(self):
         created_token = la.create_token(string="==", token_type="COMPARISON")
         self.assertEqual(created_token.type, "COMPARISON", "create_token() type failed on input '=='")
         self.assertEqual(created_token.value, "==", "create_token() value failed on input '=='")
+    def test_create_bitwise(self):
+        created_token = la.create_token(string=">>", token_type="BITWISE_SHIFT")
+        self.assertEqual(created_token.type, "BITWISE_SHIFT", "create_token() type failed on input '=='")
+        self.assertEqual(created_token.value, ">>", "create_token() value failed on input '=='")
     def test_create_left_parens(self):
         created_token = la.create_token(string="(", token_type="(")
         self.assertEqual(created_token.type, "(", "create_token() type failed on input '('")

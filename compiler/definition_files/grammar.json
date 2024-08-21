@@ -12,12 +12,23 @@
             "<ID>"
         ],
         "logical": [
-            "comparison <LOGICAL_OP> comparison",
-            "<NOT> comparison",
+            "bitwise <LOGICAL> bitwise",
+            "bitwise"
+        ],
+        "bitwise": [
+            "comparison <BITWISE_OP> comparison",
             "comparison"
         ],
         "comparison": [
-            "expression <COMPARISON> expression",
+            "shift <COMPARISON> shift",
+            "shift"
+        ],
+        "shift": [
+            "negation <BITWISE_SHIFT> negation",
+            "negation"
+        ],
+        "negation": [
+            "<NOT> expression",
             "expression"
         ],
         "expression": [
@@ -43,7 +54,7 @@
             "<BOOL>"
         ]
     },
-    "operators": ["PLUS_MINUS", "MULT_DIVIDE", "MOD", "EXP", "COMPARISON", "LOGICAL_OP", "NOT", "ASSIGN", "TYPE"],
+    "operators": ["PLUS_MINUS", "MULT_DIVIDE", "MOD", "EXP", "COMPARISON", "LOGICAL", "NOT", "ASSIGN", "TYPE", "BITWISE_OP", "BITWISE_SHIFT"],
     "objects": ["ID", "CHAR", "BOOL"],
     "exclude_from_AST": ["(", ")"]
 }

@@ -18,7 +18,10 @@
         "EXP": "\\^",
 
         "COMPARISON": "(==)|(!=)|(<=)|(>=)|<|>",
-        "LOGICAL_OP": "(\\|\\|)|(&&)",
+        "LOGICAL": "(\\|\\|)|(&&)",
+
+        "BITWISE_OP": "\\||&",
+        "BITWISE_SHIFT": ">>|<<",
         "NOT": "!",
 
         "(": "\\(",
@@ -47,7 +50,10 @@
         "EXP": 0,
         
         "COMPARISON": 1,
-        "LOGICAL_OP": 1,
+        "LOGICAL": 1,
+
+        "BITWISE_OP": 1,
+        "BITWISE_SHIFT": 1,
         "NOT": 0,
 
         "(": 0,

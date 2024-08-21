@@ -97,12 +97,29 @@ class TestGetAST(unittest.TestCase):
         token_a = la.create_token(string="a", token_type="ID")
         token_b = la.create_token(string="b", token_type="ID")
         token_plus = la.create_token(string="+", token_type="PLUS_MINUS")
-        token_and = la.create_token(string="&&", token_type="LOGICAL_OP")
+        token_and = la.create_token(string="&&", token_type="LOGICAL")
 
         expected_string = f"{str(token_and)}\n{str(token_a)}\n{str(token_plus)}\n{str(token_a)}\n{str(token_b)}"
 
         self.assertEqual(node_string, expected_string)
     
+    def test_get_bitwise_shift(self):
+        line = "a >> a+b"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
+        node = ast_generator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_a = la.create_token(string="a", token_type="ID")
+        token_b = la.create_token(string="b", token_type="ID")
+        token_plus = la.create_token(string="+", token_type="PLUS_MINUS")
+        token_shift = la.create_token(string=">>", token_type="BITWISE_SHIFT")
+
+        expected_string = f"{str(token_shift)}\n{str(token_a)}\n{str(token_plus)}\n{str(token_a)}\n{str(token_b)}"
+
+        self.assertEqual(node_string, expected_string)
+
     def test_get_not(self):
         line = "!a"
         tokens = la.convert_into_tokens(line)
@@ -118,6 +135,40 @@ class TestGetAST(unittest.TestCase):
 
         self.assertEqual(node_string, expected_string)
     
+    def test_get_not_logical(self):
+        line = "!a&&b"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
+        node = ast_generator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_a = la.create_token(string="a", token_type="ID")
+        token_b = la.create_token(string="b", token_type="ID")
+        token_not = la.create_token(string="!", token_type="NOT")
+        token_and = la.create_token(string="&&", token_type="LOGICAL")
+
+        expected_string = f"{str(token_and)}\n{str(token_not)}\n{str(token_a)}\n{str(token_b)}"
+
+        self.assertEqual(node_string, expected_string)
+
+    def test_get_bitwise_op(self):
+        line = "a & a>b"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
+        node = ast_generator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_a = la.create_token(string="a", token_type="ID")
+        token_b = la.create_token(string="b", token_type="ID")
+        token_comp = la.create_token(string=">", token_type="COMPARISON")
+        token_and = la.create_token(string="&", token_type="BITWISE_OP")
+
+        expected_string = f"{str(token_and)}\n{str(token_a)}\n{str(token_comp)}\n{str(token_a)}\n{str(token_b)}"
+
+        self.assertEqual(node_string, expected_string)
+
     def test_get_statement(self):
         line = "char x = a*a;"
         tokens = la.convert_into_tokens(line)
