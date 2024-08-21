@@ -12,6 +12,8 @@ with open(GRAMMAR_JSON_FILE, 'r') as f:
     grammar_data = json.load(f)
     GRAMMAR_RULES = grammar_data["grammar"]
     OPERATOR_TYPES = grammar_data["operators"]
+    EXCLUDE_FROM_AST = grammar_data["exclude_from_AST"]
+    OBJECT_TYPES = grammar_data["objects"]
 
 START_SYMBOL = "logical"
 
@@ -41,6 +43,39 @@ class AST_generator():
     def __init__(self, tokens:list[Token]):
         self.tokens = tokens
         self.current_token_pointer = 0
+    
+    def get_rule_length(self, rule:str) -> int:
+        '''Returns number of symbols in rule, excluding any token types marked to be excluded from AST.'''
+        rule_segments = str.split(rule)
+        count = 0
+        for segment in rule_segments:
+            if segment[0] == "<" and segment[-1] == ">":
+                if segment[1:-1] not in EXCLUDE_FROM_AST:
+                    count += 1
+            else:
+                count += 1
+        return count
+
+    def get_return_object(self, operator:Token, child_nodes:list, rule:str):
+        '''Determines what to return given an operator and list of child nodes.
+        If operator is not None and there is at least 1 child, return a new AST_node.
+        If operator is None and there is 1 child, return the child.
+        Else raise exception.'''
+        # if has an operator and at least 1 child
+        if operator != None and len(child_nodes) > 0:
+            print(f"has at least one child and op, not none")
+            new_node = AST_node(operator=operator, child_nodes=child_nodes)
+            return new_node
+        # if only 1 child and no operator
+        elif len(child_nodes) == 1:
+            print(f"has only 1 child, no operator")
+            # if rule only has 1 segment (excluding brackets)
+            rule_length = self.get_rule_length(rule)
+            if rule_length == 1:
+                return child_nodes[0]
+        else:
+            print(f"EXCEPTION: Wrong states for op, children: {operator}, {child_nodes}.")
+            raise Exception(f"Wrong states for op, children: {operator}, {child_nodes}.")
 
     def get_node(self, rule_name:str):
         '''Traverses through tokens starting from the current pointer until the given rule has been met.
@@ -73,7 +108,7 @@ class AST_generator():
                                 print("terminal is operator")
                                 operator = current_token
                             # if terminal type is object
-                            elif terminal in ["ID", "CHAR", "BOOL"]:
+                            elif terminal in OBJECT_TYPES:
                                 print("terminal is object")
                                 child_nodes.append(current_token)
                         # if no match, raise error
@@ -88,28 +123,7 @@ class AST_generator():
                         print(f"assign to child node on call {rule}, segment [{index}] {rule_segment}")
                         child_nodes.append(node)
                 
-                if len(child_nodes) > 0 and operator != None:
-                    print(f"has at least one child and op, not none")
-                    new_node = AST_node(operator=operator, child_nodes=child_nodes)
-                    return new_node
-                # if only 1 child not none
-                elif len(child_nodes) == 1 and operator == None:
-                    print(f"has only 1 child, no operator")
-                    # if rule only has 1 segment (excluding brackets)
-                    count = 0
-                    for segment in rule_segments:
-                        if segment[0] == "<" and segment[-1] == ">":
-                            if segment[1:-1] not in ["(", ")"]:
-                                count += 1
-                        else:
-                            count += 1
-                    if count == 1:
-                        print(f"return child {child_nodes[0]} from call {rule}")
-                        return child_nodes[0]
-                    print(f"rule {rule} has len != 1")
-                else:
-                    print(f"EXCEPTION: Wrong states for op, children: {operator}, {child_nodes}.")
-                    raise Exception(f"Wrong states for op, children: {operator}, {child_nodes}.")
+                return self.get_return_object(operator=operator, child_nodes=child_nodes, rule=rule)
             except:
                 pass
                 

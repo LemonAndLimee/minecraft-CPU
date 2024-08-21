@@ -36,5 +36,7 @@
             "<BOOL>"
         ]
     },
-    "operators": ["PLUS_MINUS", "MULT_DIVIDE", "MOD", "EXP", "COMPARISON", "LOGICAL_OP", "NOT"]
+    "operators": ["PLUS_MINUS", "MULT_DIVIDE", "MOD", "EXP", "COMPARISON", "LOGICAL_OP", "NOT"],
+    "objects": ["ID", "CHAR", "BOOL"],
+    "exclude_from_AST": ["(", ")"]
 }
