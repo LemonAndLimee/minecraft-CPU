@@ -41,7 +41,7 @@ class TestGetAST(unittest.TestCase):
             la.create_token(string="+", token_type="PLUS_MINUS"),
             la.create_token(string="b", token_type="ID")
         ]
-        ast_generator = sa.AST_generator(tokens=tokens)
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
         node = ast_generator.generate_abstract_syntax_tree()
         node_string = str(node)
 
@@ -54,7 +54,7 @@ class TestGetAST(unittest.TestCase):
         line = "(a+b)*a^b+a"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens)
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
         node = ast_generator.generate_abstract_syntax_tree()
         node_string = str(node)
 
@@ -73,7 +73,7 @@ class TestGetAST(unittest.TestCase):
         line = "a >= a+b"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens)
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
         node = ast_generator.generate_abstract_syntax_tree()
         node_string = str(node)
 
@@ -90,7 +90,7 @@ class TestGetAST(unittest.TestCase):
         line = "a && a+b"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens)
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
         node = ast_generator.generate_abstract_syntax_tree()
         node_string = str(node)
 
@@ -107,7 +107,7 @@ class TestGetAST(unittest.TestCase):
         line = "!a"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens)
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
         node = ast_generator.generate_abstract_syntax_tree()
         node_string = str(node)
 
@@ -115,5 +115,23 @@ class TestGetAST(unittest.TestCase):
         token_not = la.create_token(string="!", token_type="NOT")
 
         expected_string = f"{str(token_not)}\n{str(token_a)}"
+
+        self.assertEqual(node_string, expected_string)
+    
+    def test_get_statement(self):
+        line = "char x = a*a;"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="statement")
+        node = ast_generator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_a = la.create_token(string="a", token_type="ID")
+        token_x = la.create_token(string="x", token_type="ID")
+        token_assign = la.create_token(string="=", token_type="ASSIGN")
+        token_mult = la.create_token(string="*", token_type="MULT_DIVIDE")
+        token_type = la.create_token(string="char", token_type="TYPE")
+
+        expected_string = f"{str(token_assign)}\n{str(token_type)}\n{str(token_x)}\n{str(token_mult)}\n{str(token_a)}\n{str(token_a)}"
 
         self.assertEqual(node_string, expected_string)

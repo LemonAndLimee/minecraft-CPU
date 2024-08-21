@@ -15,7 +15,7 @@ with open(GRAMMAR_JSON_FILE, 'r') as f:
     EXCLUDE_FROM_AST = grammar_data["exclude_from_AST"]
     OBJECT_TYPES = grammar_data["objects"]
 
-START_SYMBOL = "logical"
+START_SYMBOL = "statement"
 
 class AST_node():
     '''Abstract Syntax Tree node. Contains operator and child nodes.
@@ -40,9 +40,10 @@ class AST_node():
 
 class AST_generator():
     '''Used to generate an Abstract Syntax Tree. Stores a list of tokens and a pointer used to traverse the list.'''
-    def __init__(self, tokens:list[Token]):
+    def __init__(self, tokens:list[Token], start_symbol:str=START_SYMBOL):
         self.tokens = tokens
         self.current_token_pointer = 0
+        self.start_symbol = start_symbol
     
     def get_rule_length(self, rule:str) -> int:
         '''Returns number of symbols in rule, excluding any token types marked to be excluded from AST.'''
@@ -132,13 +133,13 @@ class AST_generator():
         raise Exception(f"No rules under {rule_name} matched.")
     
     def generate_abstract_syntax_tree(self) -> AST_node:
-        return self.get_node(rule_name=START_SYMBOL)
+        return self.get_node(rule_name=self.start_symbol)
 
 import lexical_analysis as la
 
-line = "! b"
+line = "!a"
 tokens = la.convert_into_tokens(line)
 
-ast_generator = AST_generator(tokens=tokens)
+ast_generator = AST_generator(tokens=tokens, start_symbol="logical")
 node = ast_generator.generate_abstract_syntax_tree()
 print(f"\n{str(node)}")

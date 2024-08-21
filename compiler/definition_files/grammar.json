@@ -4,6 +4,13 @@
         "Brackets are ignored as they aren't part of the tree."
     ],
     "grammar": {
+        "statement": [
+            "variable <ASSIGN> logical <;>"
+        ],
+        "variable": [
+            "<TYPE> <ID>",
+            "<ID>"
+        ],
         "logical": [
             "comparison <LOGICAL_OP> comparison",
             "<NOT> comparison",
@@ -36,7 +43,7 @@
             "<BOOL>"
         ]
     },
-    "operators": ["PLUS_MINUS", "MULT_DIVIDE", "MOD", "EXP", "COMPARISON", "LOGICAL_OP", "NOT"],
+    "operators": ["PLUS_MINUS", "MULT_DIVIDE", "MOD", "EXP", "COMPARISON", "LOGICAL_OP", "NOT", "ASSIGN", "TYPE"],
     "objects": ["ID", "CHAR", "BOOL"],
     "exclude_from_AST": ["(", ")"]
 }
