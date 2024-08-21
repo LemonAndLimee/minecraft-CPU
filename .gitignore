@@ -3,4 +3,5 @@ compiler/__pycache__
 .vscode
 */.pytest_cache
 
-planning.txt
+*planning.txt
+*log.txt

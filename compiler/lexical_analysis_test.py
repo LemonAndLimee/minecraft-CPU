@@ -65,23 +65,23 @@ class TestGetTokenType(unittest.TestCase):
     
     def test_get_token_type_logical(self):
         token_type = la.get_token_type("==")
-        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '=='")
+        self.assertEqual(token_type, "COMPARISON", "get_token_type() failed on input '=='")
         token_type = la.get_token_type("!=")
-        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '!='")
+        self.assertEqual(token_type, "COMPARISON", "get_token_type() failed on input '!='")
         token_type = la.get_token_type("<=")
-        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '<='")
+        self.assertEqual(token_type, "COMPARISON", "get_token_type() failed on input '<='")
         token_type = la.get_token_type(">=")
-        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '>='")
+        self.assertEqual(token_type, "COMPARISON", "get_token_type() failed on input '>='")
         token_type = la.get_token_type("<")
-        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '<'")
+        self.assertEqual(token_type, "COMPARISON", "get_token_type() failed on input '<'")
         token_type = la.get_token_type(">")
-        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '>'")
+        self.assertEqual(token_type, "COMPARISON", "get_token_type() failed on input '>'")
         token_type = la.get_token_type("!")
-        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '!'")
+        self.assertEqual(token_type, "NOT", "get_token_type() failed on input '!'")
         token_type = la.get_token_type("||")
-        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '||'")
+        self.assertEqual(token_type, "LOGICAL_OP", "get_token_type() failed on input '||'")
         token_type = la.get_token_type("&&")
-        self.assertEqual(token_type, "LOGICAL", "get_token_type() failed on input '&&'")
+        self.assertEqual(token_type, "LOGICAL_OP", "get_token_type() failed on input '&&'")
 
     def test_get_token_type_parentheses(self):
         token_type = la.get_token_type("(")
@@ -152,8 +152,8 @@ class TestCreateToken(unittest.TestCase):
         self.assertEqual(created_token.type, "PLUS_MINUS", "create_token() type failed on input '+'")
         self.assertEqual(created_token.value, "+", "create_token() value failed on input '+'")
     def test_create_logical(self):
-        created_token = la.create_token(string="==", token_type="LOGICAL")
-        self.assertEqual(created_token.type, "LOGICAL", "create_token() type failed on input '=='")
+        created_token = la.create_token(string="==", token_type="COMPARISON")
+        self.assertEqual(created_token.type, "COMPARISON", "create_token() type failed on input '=='")
         self.assertEqual(created_token.value, "==", "create_token() value failed on input '=='")
     def test_create_left_parens(self):
         created_token = la.create_token(string="(", token_type="(")
@@ -225,7 +225,7 @@ class TestConvertIntoTokens(unittest.TestCase):
         for token in tokens:
             types.append(token.type)
         expected_types = [
-            "FOR", "(", "TYPE", "ID", "ASSIGN", "CHAR", ";", "ID", "LOGICAL",
+            "FOR", "(", "TYPE", "ID", "ASSIGN", "CHAR", ";", "ID", "COMPARISON",
             "CHAR", ";", "ID", "ASSIGN", "ID", "PLUS_MINUS", "CHAR", ")", "{"
             ]
         self.assertListEqual(types, expected_types)
@@ -245,9 +245,9 @@ class TestConvertIntoTokens(unittest.TestCase):
             types.append(token.type)
         expected_types = [
             "TYPE", "ID", "ASSIGN", "CHAR", ";",
-            "FOR", "(", "TYPE", "ID", "ASSIGN", "CHAR", ";", "ID", "LOGICAL",
+            "FOR", "(", "TYPE", "ID", "ASSIGN", "CHAR", ";", "ID", "COMPARISON",
             "CHAR", ";", "ID", "ASSIGN", "ID", "PLUS_MINUS", "CHAR", ")", "{",
-            "IF", "(", "ID", "MOD", "CHAR", "LOGICAL", "CHAR", ")", "{",
+            "IF", "(", "ID", "MOD", "CHAR", "COMPARISON", "CHAR", ")", "{",
             "ID", "ASSIGN", "ID", "PLUS_MINUS", "ID", ";",
             "}", "}"
         ]

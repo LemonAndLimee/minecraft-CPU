@@ -1,9 +1,18 @@
 {
     "comment_": [
         "The grammar uses list items instead of OR, and <> to refer to a token type.",
-        "A rule should only be <T>, NT <T> NT or NT, with bracket/semi-colons allowed as they aren't part of the tree."
+        "Brackets are ignored as they aren't part of the tree."
     ],
     "grammar": {
+        "logical": [
+            "comparison <LOGICAL_OP> comparison",
+            "<NOT> comparison",
+            "comparison"
+        ],
+        "comparison": [
+            "expression <COMPARISON> expression",
+            "expression"
+        ],
         "expression": [
             "term <PLUS_MINUS> term",
             "term"
@@ -26,5 +35,6 @@
             "<CHAR>", 
             "<BOOL>"
         ]
-    }
+    },
+    "operators": ["PLUS_MINUS", "MULT_DIVIDE", "MOD", "EXP", "COMPARISON", "LOGICAL_OP", "NOT"]
 }
