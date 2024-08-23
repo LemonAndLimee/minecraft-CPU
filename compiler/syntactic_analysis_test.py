@@ -186,3 +186,56 @@ class TestGetAST(unittest.TestCase):
         expected_string = f"{str(token_assign)}\n{str(token_type)}\n{str(token_x)}\n{str(token_mult)}\n{str(token_a)}\n{str(token_a)}"
 
         self.assertEqual(node_string, expected_string)
+    
+    def test_get_statements_in_block(self):
+        line = "char x = a*a;\nchar x = a*a;"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
+        node = ast_generator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_a = la.create_token(string="a", token_type="ID")
+        token_x = la.create_token(string="x", token_type="ID")
+        token_assign = la.create_token(string="=", token_type="ASSIGN")
+        token_mult = la.create_token(string="*", token_type="MULT_DIVIDE")
+        token_type = la.create_token(string="char", token_type="TYPE")
+
+        expected_string = f"block\n{str(token_assign)}\n{str(token_type)}\n{str(token_x)}\n{str(token_mult)}\n{str(token_a)}\n{str(token_a)}"
+        expected_string = expected_string +  f"\n{str(token_assign)}\n{str(token_type)}\n{str(token_x)}\n{str(token_mult)}\n{str(token_a)}\n{str(token_a)}"
+
+        self.assertEqual(node_string, expected_string)
+    
+    def test_get_while_loop(self):
+        line = "while (True) { a = a; }"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="while")
+        node = ast_generator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_a = la.create_token(string="a", token_type="ID")
+        token_while = la.create_token(string="while", token_type="WHILE")
+        token_assign = la.create_token(string="=", token_type="ASSIGN")
+        token_true = la.create_token(string="True", token_type="BOOL")
+
+        expected_string = f"{str(token_while)}\n{str(token_true)}\n{str(token_assign)}\n{str(token_a)}\n{str(token_a)}"
+
+        self.assertEqual(node_string, expected_string)
+    
+    def test_get_while_loop_in_block(self):
+        line = "while (True) { a = a; }"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
+        node = ast_generator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_a = la.create_token(string="a", token_type="ID")
+        token_while = la.create_token(string="while", token_type="WHILE")
+        token_assign = la.create_token(string="=", token_type="ASSIGN")
+        token_true = la.create_token(string="True", token_type="BOOL")
+
+        expected_string = f"{str(token_while)}\n{str(token_true)}\n{str(token_assign)}\n{str(token_a)}\n{str(token_a)}"
+
+        self.assertEqual(node_string, expected_string)

@@ -4,6 +4,20 @@
         "Brackets are ignored as they aren't part of the tree."
     ],
     "grammar": {
+        "block": [
+            "section block",
+            "section"
+        ],
+        "section": [
+            "statement",
+            "while"
+        ],
+        "while": [
+            "<WHILE> condition <{> block <}>"
+        ],
+        "condition": [
+            "<(> logical <)>"
+        ],
         "statement": [
             "variable <ASSIGN> logical <;>"
         ],
@@ -46,7 +60,7 @@
         ],
         "factor": [
             "terminal",
-            "<(> expression <)>"
+            "<(> logical <)>"
         ],
         "terminal": [
             "<ID>", 
@@ -54,7 +68,10 @@
             "<BOOL>"
         ]
     },
-    "operators": ["PLUS_MINUS", "MULT_DIVIDE", "MOD", "EXP", "COMPARISON", "LOGICAL", "NOT", "ASSIGN", "TYPE", "BITWISE_OP", "BITWISE_SHIFT"],
+    "operators": [
+        "PLUS_MINUS", "MULT_DIVIDE", "MOD", "EXP", "COMPARISON", "LOGICAL", "NOT", "ASSIGN", "TYPE", "BITWISE_OP", "BITWISE_SHIFT",
+        "WHILE"
+    ],
     "objects": ["ID", "CHAR", "BOOL"],
     "exclude_from_AST": ["(", ")"]
 }

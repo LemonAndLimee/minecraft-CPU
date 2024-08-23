@@ -17,12 +17,23 @@ with open(GRAMMAR_JSON_FILE, 'r') as f:
 
 START_SYMBOL = "statement"
 
+def get_grammar_rule_name(rule:str):
+    '''Given a rule, return its name from the json file.'''
+    for key in GRAMMAR_RULES:
+        for grammar_rule in GRAMMAR_RULES[key]:
+            if rule == grammar_rule:
+                return key
+    raise Exception("No matching grammar rule.")
+
 class AST_node():
     '''Abstract Syntax Tree node. Contains operator and child nodes.
     Child nodes are pointers to nodes, or Tokens.
-    Operator is a Token that is the 'label' of the node, describing the relationship/operation the node represents.'''
-    def __init__(self, operator:Token, child_nodes:list):
-        self.operator = operator
+    Operator is a Token or string that is the 'label' of the node, describing the relationship/operation the node represents.'''
+    def __init__(self, operator, child_nodes:list):
+        if type(operator) == Token or type(operator) == str:
+            self.operator = operator
+        else:
+            raise Exception("Operator must be of type Token or str.")
         self.child_nodes = []
         for node in child_nodes:
             if type(node) == AST_node or type(node) == Token:
@@ -57,26 +68,38 @@ class AST_generator():
                 count += 1
         return count
 
-    def get_return_object(self, operator:Token, child_nodes:list, rule:str):
+    def get_return_object(self, operator, child_nodes:list, rule:str):
         '''Determines what to return given an operator and list of child nodes.
-        If operator is not None and there is at least 1 child, return a new AST_node.
-        If operator is None and there is 1 child, return the child.
+        If there is at least 1 child:
+            If operator is not None, return a new AST_node.
+            Else if operator is None:
+                If the no. child nodes matches the no. rule elements:
+                    If this number is 1, return the child.
+                    If the number > 1, it is a grammar rule without an operator.
+                    Therefore, make a new AST_node with operator being the name of the rule segment.
+                Else if
         Else raise exception.'''
-        # if has an operator and at least 1 child
-        if operator != None and len(child_nodes) > 0:
-            print(f"has at least one child and op, not none")
-            new_node = AST_node(operator=operator, child_nodes=child_nodes)
-            return new_node
-        # if only 1 child and no operator
-        elif len(child_nodes) == 1:
-            print(f"has only 1 child, no operator")
-            # if rule only has 1 segment (excluding brackets)
-            rule_length = self.get_rule_length(rule)
-            if rule_length == 1:
-                return child_nodes[0]
-        else:
-            print(f"EXCEPTION: Wrong states for op, children: {operator}, {child_nodes}.")
-            raise Exception(f"Wrong states for op, children: {operator}, {child_nodes}.")
+        if len(child_nodes) > 0:
+            if operator != None:
+                print(f"has at least one child and op, not none")
+                new_node = AST_node(operator=operator, child_nodes=child_nodes)
+                return new_node
+            else:
+                print(f"has no op")
+                number_of_rule_elements = self.get_rule_length(rule)
+                if len(child_nodes) == number_of_rule_elements:
+                    print(f"child nodes matches rule segments length")
+                    if number_of_rule_elements == 1:
+                        print(f"returning child {str(child_nodes[0])} on rule {rule}")
+                        return child_nodes[0]
+                    elif number_of_rule_elements > 1:
+                        rule_name = get_grammar_rule_name(rule)
+                        print(f"return new node with str operator {rule_name}")
+                        new_node = AST_node(operator=rule_name, child_nodes=child_nodes)
+                        return new_node
+
+        print(f"EXCEPTION on rule {rule}: Wrong states for op, children: {operator}, {child_nodes}.")
+        raise Exception(f"Wrong states for op, children: {operator}, {child_nodes}.")
 
     def get_node(self, rule_name:str):
         '''Traverses through tokens starting from the current pointer until the given rule has been met.
@@ -137,9 +160,9 @@ class AST_generator():
 
 import lexical_analysis as la
 
-line = "!a"
+line = "while (True) { a = a; }"
 tokens = la.convert_into_tokens(line)
 
-ast_generator = AST_generator(tokens=tokens, start_symbol="logical")
+ast_generator = AST_generator(tokens=tokens, start_symbol="while")
 node = ast_generator.generate_abstract_syntax_tree()
 print(f"\n{str(node)}")
