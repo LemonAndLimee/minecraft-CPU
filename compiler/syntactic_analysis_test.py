@@ -173,7 +173,7 @@ class TestGetAST(unittest.TestCase):
         line = "char x = a*a;"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="statement")
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
         node = ast_generator.generate_abstract_syntax_tree()
         node_string = str(node)
 
@@ -187,7 +187,7 @@ class TestGetAST(unittest.TestCase):
 
         self.assertEqual(node_string, expected_string)
     
-    def test_get_statements_in_block(self):
+    def test_get_multiple_statements(self):
         line = "char x = a*a;\nchar x = a*a;"
         tokens = la.convert_into_tokens(line)
 
@@ -239,3 +239,72 @@ class TestGetAST(unittest.TestCase):
         expected_string = f"{str(token_while)}\n{str(token_true)}\n{str(token_assign)}\n{str(token_a)}\n{str(token_a)}"
 
         self.assertEqual(node_string, expected_string)
+    
+    def test_get_if(self):
+        line = "if (True) { a = a; }"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
+        node = ast_generator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_a = la.create_token(string="a", token_type="ID")
+        token_if = la.create_token(string="if", token_type="IF")
+        token_assign = la.create_token(string="=", token_type="ASSIGN")
+        token_true = la.create_token(string="True", token_type="BOOL")
+
+        expected_string = f"{str(token_if)}\n{str(token_true)}\n{str(token_assign)}\n{str(token_a)}\n{str(token_a)}"
+
+        self.assertEqual(node_string, expected_string)
+    
+    def test_get_if_else(self):
+        line = "if (True) { a = a; } else { b = b;}"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
+        node = ast_generator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_a = la.create_token(string="a", token_type="ID")
+        token_b = la.create_token(string="b", token_type="ID")
+        token_if = la.create_token(string="if", token_type="IF")
+        token_else = la.create_token(string="else", token_type="ELSE")
+        token_assign = la.create_token(string="=", token_type="ASSIGN")
+        token_true = la.create_token(string="True", token_type="BOOL")
+
+        expected_string = f"{str(token_else)}\n{str(token_if)}\n{str(token_true)}\n{str(token_assign)}\n{str(token_a)}\n{str(token_a)}"
+        expected_string = expected_string + f"\n{str(token_assign)}\n{str(token_b)}\n{str(token_b)}"
+
+        self.assertEqual(node_string, expected_string)
+    
+    def test_get_for(self):
+        line = "for (char i=i; i<i; i = i+i) {a=a;}"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
+        node = ast_generator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_a = la.create_token(string="a", token_type="ID")
+        token_i = la.create_token(string="i", token_type="ID")
+        token_for = la.create_token(string="for", token_type="FOR")
+        token_type = la.create_token(string="char", token_type="TYPE")
+        token_assign = la.create_token(string="=", token_type="ASSIGN")
+        token_plus = la.create_token(string="+", token_type="PLUS_MINUS")
+        token_comp = la.create_token(string="<", token_type="COMPARISON")
+
+        expected_string = f"{str(token_for)}\nfor_init"
+        expected_string = expected_string + f"\n{str(token_assign)}\n{str(token_type)}\n{str(token_i)}\n{str(token_i)}"
+        expected_string = expected_string + f"\n{str(token_comp)}\n{str(token_i)}\n{str(token_i)}"
+        expected_string = expected_string + f"\n{str(token_assign)}\n{str(token_i)}\n{str(token_plus)}\n{str(token_i)}\n{str(token_i)}"
+        expected_string = expected_string + f"\n{str(token_assign)}\n{str(token_a)}\n{str(token_a)}"
+
+        self.assertEqual(node_string, expected_string)
+    
+    def test_excess_tokens_error(self):
+        line = "a = a;;;"
+        tokens = la.convert_into_tokens(line)
+
+        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
+
+        self.assertRaises(Exception, ast_generator.generate_abstract_syntax_tree)

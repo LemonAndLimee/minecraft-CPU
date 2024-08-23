@@ -97,6 +97,7 @@ class AST_generator():
                         print(f"return new node with str operator {rule_name}")
                         new_node = AST_node(operator=rule_name, child_nodes=child_nodes)
                         return new_node
+                print(f"child nodes {len(child_nodes)} does not match rule segments length {number_of_rule_elements}")
 
         print(f"EXCEPTION on rule {rule}: Wrong states for op, children: {operator}, {child_nodes}.")
         raise Exception(f"Wrong states for op, children: {operator}, {child_nodes}.")
@@ -160,9 +161,9 @@ class AST_generator():
 
 import lexical_analysis as la
 
-line = "while (True) { a = a; }"
+line = "a = a;;;"
 tokens = la.convert_into_tokens(line)
 
-ast_generator = AST_generator(tokens=tokens, start_symbol="while")
+ast_generator = AST_generator(tokens=tokens, start_symbol="block")
 node = ast_generator.generate_abstract_syntax_tree()
 print(f"\n{str(node)}")

@@ -9,8 +9,23 @@
             "section"
         ],
         "section": [
-            "statement",
-            "while"
+            "statement <;>",
+            "while",
+            "if_else",
+            "for"
+        ],
+        "for": [
+            "<FOR> for_init <{> block <}>"
+        ],
+        "for_init": [
+            "<(> statement <;> comparison <;> statement <)>"
+        ],
+        "if_else": [
+            "if <ELSE> <{> block <}>",
+            "if"
+        ],
+        "if": [
+            "<IF> condition <{> block <}>"
         ],
         "while": [
             "<WHILE> condition <{> block <}>"
@@ -19,7 +34,7 @@
             "<(> logical <)>"
         ],
         "statement": [
-            "variable <ASSIGN> logical <;>"
+            "variable <ASSIGN> logical"
         ],
         "variable": [
             "<TYPE> <ID>",
@@ -70,8 +85,8 @@
     },
     "operators": [
         "PLUS_MINUS", "MULT_DIVIDE", "MOD", "EXP", "COMPARISON", "LOGICAL", "NOT", "ASSIGN", "TYPE", "BITWISE_OP", "BITWISE_SHIFT",
-        "WHILE"
+        "WHILE", "IF", "ELSE", "FOR"
     ],
     "objects": ["ID", "CHAR", "BOOL"],
-    "exclude_from_AST": ["(", ")"]
+    "exclude_from_AST": ["(", ")", ";"]
 }
