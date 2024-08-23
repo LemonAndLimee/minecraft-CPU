@@ -102,9 +102,10 @@ class AST_generator():
         print(f"EXCEPTION on rule {rule}: Wrong states for op, children: {operator}, {child_nodes}.")
         raise Exception(f"Wrong states for op, children: {operator}, {child_nodes}.")
 
-    def get_node(self, rule_name:str):
+    def get_node(self, rule_name:str, is_root_node:bool=False):
         '''Traverses through tokens starting from the current pointer until the given rule has been met.
-        Produces an AST node to represent this rule. Throws an exception if the rule cannot be met.'''
+        Produces an AST node to represent this rule. Throws an exception if the rule cannot be met.
+        If is_root_node is set to True, all tokens must be consumed for the rule to be accepted.'''
         rule_strings = GRAMMAR_RULES[rule_name]
         saved_token_pointer = self.current_token_pointer
         # foreach possible grammar string
@@ -148,6 +149,10 @@ class AST_generator():
                         print(f"assign to child node on call {rule}, segment [{index}] {rule_segment}")
                         child_nodes.append(node)
                 
+                if is_root_node == True and self.current_token_pointer != len(self.tokens):
+                    print(f"EXCEPTION: Extra leftover tokens on rule {rule}")
+                    raise Exception(f"Extra leftover tokens on rule {rule}")
+                
                 return self.get_return_object(operator=operator, child_nodes=child_nodes, rule=rule)
             except:
                 pass
@@ -157,11 +162,11 @@ class AST_generator():
         raise Exception(f"No rules under {rule_name} matched.")
     
     def generate_abstract_syntax_tree(self) -> AST_node:
-        return self.get_node(rule_name=self.start_symbol)
+        return self.get_node(rule_name=self.start_symbol, is_root_node=True)
 
 import lexical_analysis as la
 
-line = "a = a;;;"
+line = "a = a;"
 tokens = la.convert_into_tokens(line)
 
 ast_generator = AST_generator(tokens=tokens, start_symbol="block")
