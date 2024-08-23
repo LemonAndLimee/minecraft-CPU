@@ -1,7 +1,7 @@
 import unittest
 
 import lexical_analysis as la
-import syntactic_analysis as sa
+import compiler.syntax_analysis as sa
 
 class TestPrintAST(unittest.TestCase):
     def test_print_single_ast_node(self):
