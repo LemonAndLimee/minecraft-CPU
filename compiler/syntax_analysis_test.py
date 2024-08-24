@@ -1,13 +1,13 @@
 import unittest
 
 import lexical_analysis as la
-import compiler.syntax_analysis as sa
+import syntax_analysis as sa
 
 class TestPrintAST(unittest.TestCase):
-    def test_print_single_ast_node(self):
+    def test_print_single_AstNode(self):
         line = "a+b"
         tokens = la.convert_into_tokens(line)
-        node = sa.AST_node(operator=tokens[1], child_nodes=[tokens[0], tokens[2]])
+        node = sa.AstNode(operator=tokens[1], child_nodes=[tokens[0], tokens[2]])
         node_string = str(node)
         expected_string = f"{str(tokens[1])}\n{str(tokens[0])}\n{str(tokens[2])}"
         self.assertEqual(node_string, expected_string)
@@ -15,7 +15,7 @@ class TestPrintAST(unittest.TestCase):
     def test_print_not_node(self):
         line = "!a"
         tokens = la.convert_into_tokens(line)
-        node = sa.AST_node(operator=tokens[0], child_nodes=[tokens[1]])
+        node = sa.AstNode(operator=tokens[0], child_nodes=[tokens[1]])
         node_string = str(node)
         expected_string = f"{str(tokens[0])}\n{str(tokens[1])}"
         self.assertEqual(node_string, expected_string)
@@ -26,9 +26,9 @@ class TestPrintAST(unittest.TestCase):
         token_plus = la.create_token(string="+", token_type="PLUS_MINUS")
         token_mult = la.create_token(string="*", token_type="MULT_DIVIDE")
 
-        node1 = sa.AST_node(operator=token_mult, child_nodes=[token_a, token_b])
-        node2 = sa.AST_node(operator=token_mult, child_nodes=[token_b, token_a])
-        root_node = sa.AST_node(operator=token_plus, child_nodes=[node1, node2])
+        node1 = sa.AstNode(operator=token_mult, child_nodes=[token_a, token_b])
+        node2 = sa.AstNode(operator=token_mult, child_nodes=[token_b, token_a])
+        root_node = sa.AstNode(operator=token_plus, child_nodes=[node1, node2])
         node_string = str(root_node)
 
         expected_string = f"{str(token_plus)}\n{str(token_mult)}\n{str(token_a)}\n{str(token_b)}\n{str(token_mult)}\n{str(token_b)}\n{str(token_a)}"
@@ -41,8 +41,8 @@ class TestGetAST(unittest.TestCase):
             la.create_token(string="+", token_type="PLUS_MINUS"),
             la.create_token(string="b", token_type="ID")
         ]
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="logical")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         expected_string = f"{str(tokens[1])}\n{str(tokens[0])}\n{str(tokens[2])}"
@@ -54,8 +54,8 @@ class TestGetAST(unittest.TestCase):
         line = "(a+b)*a^b+a"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="logical")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -73,8 +73,8 @@ class TestGetAST(unittest.TestCase):
         line = "a >= a+b"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="logical")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -90,8 +90,8 @@ class TestGetAST(unittest.TestCase):
         line = "a && a+b"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="logical")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -107,8 +107,8 @@ class TestGetAST(unittest.TestCase):
         line = "a >> a+b"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="logical")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -124,8 +124,8 @@ class TestGetAST(unittest.TestCase):
         line = "!a"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="logical")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -139,8 +139,8 @@ class TestGetAST(unittest.TestCase):
         line = "!a&&b"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="logical")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -156,8 +156,8 @@ class TestGetAST(unittest.TestCase):
         line = "a & a>b"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="logical")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="logical")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -173,8 +173,8 @@ class TestGetAST(unittest.TestCase):
         line = "char x = a*a;"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="block")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -191,8 +191,8 @@ class TestGetAST(unittest.TestCase):
         line = "char x = a*a;\nchar x = a*a;"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="block")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -210,8 +210,8 @@ class TestGetAST(unittest.TestCase):
         line = "while (True) { a = a; }"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="while")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="while")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -227,8 +227,8 @@ class TestGetAST(unittest.TestCase):
         line = "while (True) { a = a; }"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="block")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -244,8 +244,8 @@ class TestGetAST(unittest.TestCase):
         line = "if (True) { a = a; }"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="block")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -261,8 +261,8 @@ class TestGetAST(unittest.TestCase):
         line = "if (True) { a = a; } else { b = b;}"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="block")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -281,8 +281,8 @@ class TestGetAST(unittest.TestCase):
         line = "for (char i=i; i<i; i = i+i) {a=a;}"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
-        node = ast_generator.generate_abstract_syntax_tree()
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="block")
+        node = AstGenerator.generate_abstract_syntax_tree()
         node_string = str(node)
 
         token_a = la.create_token(string="a", token_type="ID")
@@ -305,6 +305,7 @@ class TestGetAST(unittest.TestCase):
         line = "a = a;;;"
         tokens = la.convert_into_tokens(line)
 
-        ast_generator = sa.AST_generator(tokens=tokens, start_symbol="block")
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="block")
 
-        self.assertRaises(Exception, ast_generator.generate_abstract_syntax_tree)
+        self.assertRaises(Exception, AstGenerator.generate_abstract_syntax_tree)
+

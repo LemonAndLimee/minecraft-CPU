@@ -25,7 +25,7 @@ def get_grammar_rule_name(rule:str):
                 return key
     raise Exception("No matching grammar rule.")
 
-class AST_node():
+class AstNode():
     '''Abstract Syntax Tree node. Contains operator and child nodes.
     Child nodes are pointers to nodes, or Tokens.
     Operator is a Token or string that is the 'label' of the node, describing the relationship/operation the node represents.'''
@@ -36,10 +36,10 @@ class AST_node():
             raise Exception("Operator must be of type Token or str.")
         self.child_nodes = []
         for node in child_nodes:
-            if type(node) == AST_node or type(node) == Token:
+            if type(node) == AstNode or type(node) == Token:
                 self.child_nodes.append(node)
             else:
-                raise Exception("Child node must be of type AST_node or Token.")
+                raise Exception("Child node must be of type AstNode or Token.")
     
     def __str__(self) -> str:
         output_string = str(self.operator)
@@ -49,7 +49,7 @@ class AST_node():
         
         return output_string
 
-class AST_generator():
+class AstGenerator():
     '''Used to generate an Abstract Syntax Tree. Stores a list of tokens and a pointer used to traverse the list.'''
     def __init__(self, tokens:list[Token], start_symbol:str=START_SYMBOL):
         self.tokens = tokens
@@ -71,18 +71,18 @@ class AST_generator():
     def get_return_object(self, operator, child_nodes:list, rule:str):
         '''Determines what to return given an operator and list of child nodes.
         If there is at least 1 child:
-            If operator is not None, return a new AST_node.
+            If operator is not None, return a new AstNode.
             Else if operator is None:
                 If the no. child nodes matches the no. rule elements:
                     If this number is 1, return the child.
                     If the number > 1, it is a grammar rule without an operator.
-                    Therefore, make a new AST_node with operator being the name of the rule segment.
+                    Therefore, make a new AstNode with operator being the name of the rule segment.
                 Else if
         Else raise exception.'''
         if len(child_nodes) > 0:
             if operator != None:
                 print(f"has at least one child and op, not none")
-                new_node = AST_node(operator=operator, child_nodes=child_nodes)
+                new_node = AstNode(operator=operator, child_nodes=child_nodes)
                 return new_node
             else:
                 print(f"has no op")
@@ -95,7 +95,7 @@ class AST_generator():
                     elif number_of_rule_elements > 1:
                         rule_name = get_grammar_rule_name(rule)
                         print(f"return new node with str operator {rule_name}")
-                        new_node = AST_node(operator=rule_name, child_nodes=child_nodes)
+                        new_node = AstNode(operator=rule_name, child_nodes=child_nodes)
                         return new_node
                 print(f"child nodes {len(child_nodes)} does not match rule segments length {number_of_rule_elements}")
 
@@ -161,14 +161,5 @@ class AST_generator():
         print(f"EXCEPTION: No rules under {rule_name} matched.")
         raise Exception(f"No rules under {rule_name} matched.")
     
-    def generate_abstract_syntax_tree(self) -> AST_node:
+    def generate_abstract_syntax_tree(self) -> AstNode:
         return self.get_node(rule_name=self.start_symbol, is_root_node=True)
-
-import lexical_analysis as la
-
-line = "a = a;"
-tokens = la.convert_into_tokens(line)
-
-ast_generator = AST_generator(tokens=tokens, start_symbol="block")
-node = ast_generator.generate_abstract_syntax_tree()
-print(f"\n{str(node)}")
