@@ -34,11 +34,15 @@
             "<(> logical <)>"
         ],
         "statement": [
-            "variable <ASSIGN> logical"
+            "variable <ASSIGN> logical",
+            "declaration"
         ],
         "variable": [
             "<TYPE> <ID>",
             "<ID>"
+        ],
+        "declaration": [
+            "<TYPE> <ID>"
         ],
         "logical": [
             "bitwise <LOGICAL> bitwise",

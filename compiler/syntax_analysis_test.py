@@ -187,6 +187,21 @@ class TestGetAST(unittest.TestCase):
 
         self.assertEqual(node_string, expected_string)
     
+    def test_get_declaration(self):
+        line = "char x;"
+        tokens = la.convert_into_tokens(line)
+
+        AstGenerator = sa.AstGenerator(tokens=tokens, start_symbol="block")
+        node = AstGenerator.generate_abstract_syntax_tree()
+        node_string = str(node)
+
+        token_x = la.create_token(string="x", token_type="ID")
+        token_type = la.create_token(string="char", token_type="TYPE")
+
+        expected_string = f"{str(token_type)}\n{str(token_x)}"
+
+        self.assertEqual(node_string, expected_string)
+    
     def test_get_multiple_statements(self):
         line = "char x = a*a;\nchar x = a*a;"
         tokens = la.convert_into_tokens(line)
