@@ -1,13 +1,10 @@
 import json
 from lexical_analysis import Token
+import os
 
-current_dir = ""
-for index in reversed(range(len(__file__))):
-    if __file__[index] == '/':
-        current_dir = __file__[:index]
-        break
+dir_path = os.path.dirname(os.path.realpath(__file__))
+GRAMMAR_JSON_FILE = dir_path + "/definition_files/grammar.json"
 
-GRAMMAR_JSON_FILE = current_dir + "/definition_files/grammar.json"
 with open(GRAMMAR_JSON_FILE, 'r') as f:
     grammar_data = json.load(f)
     GRAMMAR_RULES = grammar_data["grammar"]
