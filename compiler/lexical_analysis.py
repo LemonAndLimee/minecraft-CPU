@@ -8,7 +8,7 @@ TOKEN_TYPES_JSON_FILE = dir_path + "/definition_files/token_types.json"
 
 class Token:
     '''Class used to hold info about a lexical token. Contains a token type, and an optional value.'''
-    def __init__(self, type:int, value:str=None) -> None:
+    def __init__(self, type:str, value:str=None) -> None:
         self.type = type
         self.value = value if value != None else None
     def __str__(self) -> str:
