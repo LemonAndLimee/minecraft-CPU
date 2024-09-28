@@ -92,5 +92,6 @@
         "WHILE", "IF", "ELSE", "FOR"
     ],
     "objects": ["ID", "CHAR", "BOOL"],
-    "exclude_from_AST": ["(", ")", ";"]
+    "exclude_from_AST": ["(", ")", ";"],
+    "scope_definers": ["FOR", "IF", "WHILE", "ELSE"]
 }

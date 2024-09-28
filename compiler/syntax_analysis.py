@@ -11,6 +11,7 @@ with open(GRAMMAR_JSON_FILE, 'r') as f:
     OPERATOR_TYPES = grammar_data["operators"]
     EXCLUDE_FROM_AST = grammar_data["exclude_from_AST"]
     OBJECT_TYPES = grammar_data["objects"]
+    SCOPE_DEFINERS = grammar_data["scope_definers"]
 
 START_SYMBOL = "statement"
 

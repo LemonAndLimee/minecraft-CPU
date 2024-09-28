@@ -121,7 +121,7 @@ class TestCreateToken(unittest.TestCase):
     def test_create_type(self):
         created_token = la.create_token(string="char", token_type="TYPE")
         self.assertEqual(created_token.type, "TYPE", "create_token() type failed on input 'char'")
-        self.assertEqual(created_token.value, "char", "create_token() value failed on input 'char'")
+        self.assertEqual(created_token.value, "CHAR", "create_token() value failed on input 'char'")
     def test_create_assign(self):
         created_token = la.create_token(string="=", token_type="ASSIGN")
         self.assertEqual(created_token.type, "ASSIGN", "create_token() type failed on input '='")
