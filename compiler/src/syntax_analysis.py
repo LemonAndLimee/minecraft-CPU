@@ -1,9 +1,9 @@
 import json
-from lexical_analysis import Token
+from src.lexical_analysis import Token
 import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-GRAMMAR_JSON_FILE = dir_path + "/definition_files/grammar.json"
+GRAMMAR_JSON_FILE = dir_path + "\\..\\definition_files\\grammar.json"
 
 with open(GRAMMAR_JSON_FILE, 'r') as f:
     grammar_data = json.load(f)

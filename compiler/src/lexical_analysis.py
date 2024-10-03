@@ -4,7 +4,7 @@ import os
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-TOKEN_TYPES_JSON_FILE = dir_path + "/definition_files/token_types.json"
+TOKEN_TYPES_JSON_FILE = dir_path + "\\..\\definition_files\\token_types.json"
 
 class Token:
     '''Class used to hold info about a lexical token. Contains a token type, and an optional value.'''

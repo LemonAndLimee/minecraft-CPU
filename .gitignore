@@ -1,5 +1,6 @@
 .DS_store
-compiler/__pycache__
+**/__pycache__
+**/compiler.egg-info
 .vscode
 */.pytest_cache
 
