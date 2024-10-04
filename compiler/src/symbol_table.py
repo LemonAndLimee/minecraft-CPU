@@ -69,3 +69,47 @@ class StEntryConst(StEntry):
             return False
         return True
 
+class SymbolTable():
+    '''Stores symbols and entries in a dict, as well as references to parent and child symbol tables.
+    Attributes:
+        parent:SymbolTable
+        children:dict - in the form Token:SymbolTable
+        table:dict - contains symbol table entries in the form name:Entry
+    '''
+    def __init__(self, parent:"SymbolTable"=None) -> None:
+        self.parent = parent
+        self.children = {}
+        self.table = {}
+    
+    def __eq__(self, value:"SymbolTable") -> bool:
+        if len(self.table) != len(value.table):
+            return False
+        else:
+            for name in self.table.keys():
+                if name not in value.table.keys():
+                    return False
+                if self.get_entry(name) != value.get_entry(name):
+                    return False
+        return True
+    
+    def __str__(self) -> str:
+        output_string = ""
+        for name in self.table.keys():
+            output_string = output_string + f"{name}:[{str(self.get_entry(name))}],\n"
+        output_string = output_string[:-2]
+        return output_string
+    
+    def get_entry(self, name:str) -> StEntry:
+        try:
+            return self.table[name]
+        except:
+            return None
+    
+    def add_entry(self, name:str, entry:StEntry):
+        if name in self.table.keys():
+            raise Exception("Entry already exists.")
+        else:
+            self.table[name] = entry
+    
+    def assign_child(self, token:Token, child:"SymbolTable"):
+        self.children[token] = child
