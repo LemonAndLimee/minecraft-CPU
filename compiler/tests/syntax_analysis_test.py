@@ -7,7 +7,7 @@ class TestPrintAST(unittest.TestCase):
     def test_print_single_AstNode(self):
         line = "a+b"
         tokens = la.convert_into_tokens(line)
-        node = sa.AstNode(operator=tokens[1], child_nodes=[tokens[0], tokens[2]])
+        node = sa.AstNode(operator=tokens[1], children=[tokens[0], tokens[2]])
         node_string = str(node)
         expected_string = f"{str(tokens[1])}\n{str(tokens[0])}\n{str(tokens[2])}"
         self.assertEqual(node_string, expected_string)
@@ -15,7 +15,7 @@ class TestPrintAST(unittest.TestCase):
     def test_print_not_node(self):
         line = "!a"
         tokens = la.convert_into_tokens(line)
-        node = sa.AstNode(operator=tokens[0], child_nodes=[tokens[1]])
+        node = sa.AstNode(operator=tokens[0], children=[tokens[1]])
         node_string = str(node)
         expected_string = f"{str(tokens[0])}\n{str(tokens[1])}"
         self.assertEqual(node_string, expected_string)
@@ -26,9 +26,9 @@ class TestPrintAST(unittest.TestCase):
         token_plus = la.create_token(string="+", token_type="PLUS_MINUS")
         token_mult = la.create_token(string="*", token_type="MULT_DIVIDE")
 
-        node1 = sa.AstNode(operator=token_mult, child_nodes=[token_a, token_b])
-        node2 = sa.AstNode(operator=token_mult, child_nodes=[token_b, token_a])
-        root_node = sa.AstNode(operator=token_plus, child_nodes=[node1, node2])
+        node1 = sa.AstNode(operator=token_mult, children=[token_a, token_b])
+        node2 = sa.AstNode(operator=token_mult, children=[token_b, token_a])
+        root_node = sa.AstNode(operator=token_plus, children=[node1, node2])
         node_string = str(root_node)
 
         expected_string = f"{str(token_plus)}\n{str(token_mult)}\n{str(token_a)}\n{str(token_b)}\n{str(token_mult)}\n{str(token_b)}\n{str(token_a)}"

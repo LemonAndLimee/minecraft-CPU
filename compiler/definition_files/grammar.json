@@ -93,5 +93,6 @@
     ],
     "objects": ["ID", "CHAR", "BOOL"],
     "exclude_from_AST": ["(", ")", ";"],
-    "scope_definers": ["FOR", "IF", "WHILE", "ELSE"]
+    "scope_definers": ["FOR", "IF", "WHILE", "ELSE"],
+    "const_types": ["CHAR", "BOOL"]
 }

@@ -12,6 +12,7 @@ with open(GRAMMAR_JSON_FILE, 'r') as f:
     EXCLUDE_FROM_AST = grammar_data["exclude_from_AST"]
     OBJECT_TYPES = grammar_data["objects"]
     SCOPE_DEFINERS = grammar_data["scope_definers"]
+    CONST_TYPES = grammar_data["const_types"]
 
 START_SYMBOL = "statement"
 
@@ -25,24 +26,25 @@ def get_grammar_rule_name(rule:str):
 
 class AstNode():
     '''Abstract Syntax Tree node. Contains operator and child nodes.
-    Child nodes are pointers to nodes, or Tokens.
-    Operator is a Token or string that is the 'label' of the node, describing the relationship/operation the node represents.'''
-    def __init__(self, operator, child_nodes:list):
+    Attributes:
+        children (list): list of pointers to child nodes, or Tokens.
+        operator: a Token or string that is the 'label' of the node, describing the relationship/operation the node represents.'''
+    def __init__(self, operator, children:list):
         if type(operator) == Token or type(operator) == str:
             self.operator = operator
         else:
             raise Exception("Operator must be of type Token or str.")
-        self.child_nodes = []
-        for node in child_nodes:
+        self.children = []
+        for node in children:
             if type(node) == AstNode or type(node) == Token:
-                self.child_nodes.append(node)
+                self.children.append(node)
             else:
                 raise Exception("Child node must be of type AstNode or Token.")
     
     def __str__(self) -> str:
         output_string = str(self.operator)
 
-        for node in self.child_nodes:
+        for node in self.children:
             output_string = output_string + "\n" + str(node)
         
         return output_string
@@ -66,7 +68,7 @@ class AstGenerator():
                 count += 1
         return count
 
-    def get_return_object(self, operator, child_nodes:list, rule:str):
+    def get_return_object(self, operator, children:list, rule:str):
         '''Determines what to return given an operator and list of child nodes.
         If there is at least 1 child:
             If operator is not None, return a new AstNode.
@@ -77,28 +79,28 @@ class AstGenerator():
                     Therefore, make a new AstNode with operator being the name of the rule segment.
                 Else if
         Else raise exception.'''
-        if len(child_nodes) > 0:
+        if len(children) > 0:
             if operator != None:
                 print(f"has at least one child and op, not none")
-                new_node = AstNode(operator=operator, child_nodes=child_nodes)
+                new_node = AstNode(operator=operator, children=children)
                 return new_node
             else:
                 print(f"has no op")
                 number_of_rule_elements = self.get_rule_length(rule)
-                if len(child_nodes) == number_of_rule_elements:
+                if len(children) == number_of_rule_elements:
                     print(f"child nodes matches rule segments length")
                     if number_of_rule_elements == 1:
-                        print(f"returning child {str(child_nodes[0])} on rule {rule}")
-                        return child_nodes[0]
+                        print(f"returning child {str(children[0])} on rule {rule}")
+                        return children[0]
                     elif number_of_rule_elements > 1:
                         rule_name = get_grammar_rule_name(rule)
                         print(f"return new node with str operator {rule_name}")
-                        new_node = AstNode(operator=rule_name, child_nodes=child_nodes)
+                        new_node = AstNode(operator=rule_name, children=children)
                         return new_node
-                print(f"child nodes {len(child_nodes)} does not match rule segments length {number_of_rule_elements}")
+                print(f"child nodes {len(children)} does not match rule segments length {number_of_rule_elements}")
 
-        print(f"EXCEPTION on rule {rule}: Wrong states for op, children: {operator}, {child_nodes}.")
-        raise Exception(f"Wrong states for op, children: {operator}, {child_nodes}.")
+        print(f"EXCEPTION on rule {rule}: Wrong states for op, children: {operator}, {children}.")
+        raise Exception(f"Wrong states for op, children: {operator}, {children}.")
 
     def get_node(self, rule_name:str, is_root_node:bool=False):
         '''Traverses through tokens starting from the current pointer until the given rule has been met.
@@ -113,7 +115,7 @@ class AstGenerator():
             try:
                 rule_segments = str.split(rule)
                 operator = None
-                child_nodes = []
+                children = []
 
                 for index in range(len(rule_segments)):
                     rule_segment = rule_segments[index]
@@ -134,7 +136,7 @@ class AstGenerator():
                             # if terminal type is object
                             elif terminal in OBJECT_TYPES:
                                 print("terminal is object")
-                                child_nodes.append(current_token)
+                                children.append(current_token)
                         # if no match, raise error
                         else:
                             print(f"EXCEPTION: terminal {terminal} does not matches token {self.tokens[self.current_token_pointer]}")
@@ -145,13 +147,13 @@ class AstGenerator():
                         print(f"calling get_node on {rule_segment}")
                         node = self.get_node(rule_segment)
                         print(f"assign to child node on call {rule}, segment [{index}] {rule_segment}")
-                        child_nodes.append(node)
+                        children.append(node)
                 
                 if is_root_node == True and self.current_token_pointer != len(self.tokens):
                     print(f"EXCEPTION: Extra leftover tokens on rule {rule}")
                     raise Exception(f"Extra leftover tokens on rule {rule}")
                 
-                return self.get_return_object(operator=operator, child_nodes=child_nodes, rule=rule)
+                return self.get_return_object(operator=operator, children=children, rule=rule)
             except:
                 pass
                 

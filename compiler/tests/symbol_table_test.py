@@ -1,4 +1,5 @@
 import unittest
+
 from src.symbol_table import *
 
 class TestEntryClasses(unittest.TestCase):
@@ -72,13 +73,34 @@ class TestSymbolTableClass(unittest.TestCase):
         
         expected_string = f"test1:[{str(entry)}],\ntest2:[{str(entry)}]"
         self.assertEqual(str(table), expected_string)
-    def test_get_entry(self):
-        '''Test SymbolTable get_entry() method'''
+    def test_get_entry_in_current_table(self):
+        '''Test SymbolTable get_entry() method. It should return an entry if it exists in current table or higher in tree.'''
         table = SymbolTable()
         entry = StEntryVar(memory_addr=0, data_type="CHAR")
         table.table["test1"] = entry
         
         self.assertEqual(table.get_entry("test1"), entry)
+    def test_get_entry_in_higher_table(self):
+        '''Test SymbolTable get_entry() method. It should return an entry if it exists in current table or higher in tree.'''
+        table = SymbolTable()
+        entry = StEntryVar(memory_addr=0, data_type="CHAR")
+        table.table["test1"] = entry
+        child_table = SymbolTable(parent=table)
+        
+        self.assertEqual(child_table.get_entry("test1"), entry)
+    def test_get_const_entry_in_current_table(self):
+        '''Test SymbolTable get_const_entry() method. It should return an entry if it exists in the root node table.'''
+        table = SymbolTable()
+        entry = StEntryConst(memory_addr=0, data_type="CHAR", const_value=3)
+        table.table["test1"] = entry
+        self.assertEqual(table.get_const_entry(3), entry)
+    def test_get_const_entry_in_higher_table(self):
+        '''Test SymbolTable get_const_entry() method. It should return an entry if it exists the root node table.'''
+        table = SymbolTable()
+        entry = StEntryConst(memory_addr=0, data_type="CHAR", const_value=3)
+        table.table["test1"] = entry
+        child_table = SymbolTable(parent=table)
+        self.assertEqual(child_table.get_const_entry(3), entry)
     def test_get_nonexistent_entry(self):
         '''Test get_entry() method on non-existent entry. Should return None.'''
         table = SymbolTable()
@@ -105,3 +127,14 @@ class TestSymbolTableClass(unittest.TestCase):
         
         table.assign_child(token, child_table)
         self.assertEqual(table.children[token], child_table)
+    def test_get_root_node(self):
+        '''Test get_root_node() method'''
+        table = SymbolTable()
+        child_table = SymbolTable(parent=table)
+        grandchild_table = SymbolTable(parent=child_table)
+        
+        self.assertEqual(grandchild_table.get_root_node(), table)
+
+class TestSymbolTableGenerator(unittest.TestCase):
+    def t(self):
+        pass
