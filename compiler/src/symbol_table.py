@@ -18,10 +18,15 @@ class StEntry():
         return output
     
     def __eq__(self, entry: object) -> bool:
-        if entry.memory_address == self.memory_address and entry.data_type == self.data_type and entry.entry_type == self.entry_type:
-            return True
-        else:
+        if entry == None:
             return False
+        elif isinstance(entry, StEntry) or issubclass(entry, StEntry):
+            if entry.memory_address == self.memory_address and entry.data_type == self.data_type and entry.entry_type == self.entry_type:
+                return True
+            else:
+                return False
+        else:
+            raise TypeError("Entry must be of type StEntry or a derived data type.")
 
 class StEntryVar(StEntry):
     '''Stores data for a variable entry in the symbol table dict.
@@ -86,6 +91,7 @@ class SymbolTable():
         self.table = {}
     
     def __eq__(self, value:"SymbolTable") -> bool:
+        '''Compares 2 symbol table classes. Only considers table entries; children/parent are not compared.'''
         if len(self.table) != len(value.table):
             return False
         else:
@@ -130,6 +136,13 @@ class SymbolTable():
     def assign_child(self, token:Token, child:"SymbolTable"):
         self.children[token] = child
     
+    def get_child(self, token:Token) -> "SymbolTable" :
+        '''Returns child table associated with a given token. If there is no associated child, return None.'''
+        if token in self.children.keys():
+            return self.children[token]
+        else:
+            return None
+    
     def get_root_node(self) -> "SymbolTable":
         '''Returns root node of symbol table tree. Returns self if has no parent.'''
         if self.parent is None:
@@ -157,6 +170,23 @@ class SymbolTableGenerator():
         self.traverse_ast(ast_parent_node=ast_node, current_st=symbol_table)
         return symbol_table
     
+    def traverse_ast(self, ast_parent_node:AstNode, current_st:SymbolTable=None):
+        '''Traverses an AST, adding entries or children to the given symbol table.
+        Attributes:
+            ast_parent_node (AstNode): The root of the AST (can be a Token if the tree is one object)
+            current_st (SymbolTable): The table to add new entries to (if None, will create new one)
+        '''
+        for node in ast_parent_node.children:
+            self.process_ast_object(node=node, parent_node=ast_parent_node, current_st=current_st)
+    
+    def process_ast_object(self, node:AstNode, parent_node:AstNode, current_st:SymbolTable):
+        '''Represents a single step in the traversal of an AST.
+        An AST object is considered, and depending on if it is of type AstNode or Token, a function call is made to take further action.'''
+        if type(node) == AstNode:
+            self.process_ast_node(node=node, current_st=current_st)
+        elif type(node) == Token:
+            self.process_token(token=node, parent_node=parent_node, current_st=current_st)
+    
     def process_ast_node(self, node:AstNode, current_st:SymbolTable):
         '''Represents a single step in the traversal of an AST.
         Consider ast node: either create a new child table or continue traversing the tree via children.
@@ -167,58 +197,53 @@ class SymbolTableGenerator():
             current_st.assign_child(token=node.operator, child=child_table)
         # else if node has children, recursively call to continue traversing tree
         elif len(node.children) > 0:
-            for child in node.children:
-                self.traverse_ast(child=child, current_st=current_st)
+            self.traverse_ast(ast_parent_node=node, current_st=current_st)
     
-    def process_token(self, node:AstNode, current_st:SymbolTable):
+    def process_token(self, token:Token, parent_node:AstNode, current_st:SymbolTable):
         '''Represents a single step in the traversal of an AST.
         Consider token in ast: check type, check if declaration, create/edit entry as appropriate.
+        A token should always have a parent node, since it represents a leaf of the tree.
         '''
-    
-    def process_ast_object(self, node:AstNode, current_st:SymbolTable):
-        '''Represents a single step in the traversal of an AST.
-        An AST object is considered, and depending on if it is of type AstNode or Token, a function call is made to take further action.'''
-        if type(node) == AstNode:
-            self.process_ast_node(node=node, current_st=current_st)
-        elif type(node) == Token:
-            if node.type == "ID":
-                name = node.value
-                entry = current_st.get_entry(name)
-                # if there is an existing entry for that name
-                if entry != None:
-                    if type(entry) == StEntryVar:
-                        entry.is_accessed = True
-                    else:
-                        raise Exception(f"Entry type invalid for {name}: must be var.")
-                    # if parent is <TYPE>, raise error, as it has already been declared somewhere else
-                    if type(ast_parent_node.operator) == Token and ast_parent_node.operator.type == "TYPE":
-                        raise Exception(f"Entry already exists for {name}: cannot declare it.")
-                # if there is no existing entry, create one
+        if token.type == "ID":
+            name = token.value
+            entry = current_st.get_entry(name)
+            # if there is an existing entry for that name
+            if entry != None:
+                if type(entry) == StEntryVar:
+                    entry.is_accessed = True
                 else:
-                    if type(ast_parent_node.operator) == Token and ast_parent_node.operator.type == "TYPE":
-                        data_type = ast_parent_node.operator.value
-                        new_entry = StEntryVar(memory_addr=self.next_mem_addr, data_type=data_type)
-                        self.next_mem_addr = self.next_mem_addr + 1
-                        current_st.add_entry(name=name, entry=new_entry)
-                    # if it is not a declaration, raise error as there is no existing entry
-                    else:
-                        raise Exception(f"Variable {name} has not been declared.")
-            if node.type in CONST_TYPES:
-                entry = current_st.get_const_entry(node.value)
-                # if there is no existing const entry, create one
-                if entry == None:
-                    new_entry = StEntryConst(memory_addr=self.next_mem_addr, data_type=node.type, const_value=node.value)
-                    name = "const_" + str(self.next_const_name_ptr)
-                    root_table = current_st.get_root_node()
-                    root_table.add_entry(name=name, entry=new_entry)
-                    self.next_mem_addr = self.next_mem_addr + 1
-                    self.next_const_name_ptr = self.next_const_name_ptr + 1
+                    raise Exception(f"There is an existing entry {entry} for name {name}. Entry type invalid: must be var.")
+                # if parent is <TYPE>, raise error, as it has already been declared somewhere else
+                if parent_node.operator.type == "TYPE":
+                    raise Exception(f"Entry already exists for {name}: cannot declare it.")
+            # if there is no existing entry, create one
+            else:
+                # if declaration, create entry
+                if parent_node.operator.type == "TYPE":
+                    self.add_var_entry(table=current_st, data_type=parent_node.operator.value, name=name)
+                # if it is not a declaration, raise error as there is no existing entry
+                else:
+                    raise Exception(f"Variable {name} has not been declared.")
+        if token.type in CONST_TYPES:
+            entry = current_st.get_const_entry(token.value)
+            # if there is no existing const entry, create one
+            if entry == None:
+                root_table = current_st.get_root_node()
+                self.add_const_entry(table=root_table, data_type=token.type, const_value=token.value)
     
-    def traverse_ast(self, ast_parent_node:AstNode, current_st:SymbolTable=None):
-        '''Traverses an AST, adding entries or children to the given symbol table.
-        Attributes:
-            ast_parent_node (AstNode): The root of the AST (can be a Token if the tree is one object)
-            current_st (SymbolTable): The table to add new entries to (if None, will create new one)
-        '''
-        for node in ast_parent_node.children:
-            self.process_ast_object(node=node, current_st=current_st)
+    def add_const_entry(self, table:SymbolTable, data_type:str, const_value):
+        '''Adds const entry to specified table, generating a name using const name pointer.'''
+        entry = StEntryConst(memory_addr=self.next_mem_addr, data_type=data_type, const_value=const_value)
+        name = "const_" + str(self.next_const_name_ptr)
+        self.next_const_name_ptr = self.next_const_name_ptr + 1
+        self.add_entry(table=table, name=name, entry=entry)
+    
+    def add_var_entry(self, table:SymbolTable, data_type:str, name:str):
+        '''Adds var entry to specified table.'''
+        entry = StEntryVar(memory_addr=self.next_mem_addr, data_type=data_type)
+        self.add_entry(table=table, name=name, entry=entry)
+    
+    def add_entry(self, table:SymbolTable, entry:StEntry, name:str):
+        '''Adds entry to specified table. Increments memory address pointer.'''
+        table.add_entry(name=name, entry=entry)
+        self.next_mem_addr = self.next_mem_addr + 1

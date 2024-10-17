@@ -29,7 +29,7 @@ class AstNode():
     Attributes:
         children (list): list of pointers to child nodes, or Tokens.
         operator: a Token or string that is the 'label' of the node, describing the relationship/operation the node represents.'''
-    def __init__(self, operator, children:list):
+    def __init__(self, operator, children:list=[]):
         if type(operator) == Token or type(operator) == str:
             self.operator = operator
         else:
