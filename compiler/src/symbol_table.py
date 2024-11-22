@@ -1,5 +1,4 @@
-from src.syntax_analysis import AstNode, SCOPE_DEFINERS, CONST_TYPES
-from src.lexical_analysis import Token
+from src.syntax_analysis import AstNode, Token, SCOPE_DEFINERS, CONST_TYPES
 
 class StEntry():
     '''Stores data for an entry in the symbol table dict.
@@ -223,7 +222,7 @@ class SymbolTableGenerator():
                     self.add_var_entry(table=current_st, data_type=parent_node.operator.value, name=name)
                 # if it is not a declaration, raise error as there is no existing entry
                 else:
-                    raise Exception(f"Variable {name} has not been declared.")
+                    raise Exception(f"Undefined reference to variable {name}")
         if token.type in CONST_TYPES:
             entry = current_st.get_const_entry(token.value)
             # if there is no existing const entry, create one
