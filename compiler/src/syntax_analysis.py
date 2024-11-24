@@ -1,58 +1,6 @@
-import json
-from src.lexical_analysis import Token
-import os
-
-dir_path = os.path.dirname(os.path.realpath(__file__))
-GRAMMAR_JSON_FILE = dir_path + "\\..\\definition_files\\grammar.json"
-
-with open(GRAMMAR_JSON_FILE, 'r') as f:
-    grammar_data = json.load(f)
-    GRAMMAR_RULES = grammar_data["grammar"]
-    OPERATOR_TYPES = grammar_data["operators"]
-    EXCLUDE_FROM_AST = grammar_data["exclude_from_AST"]
-    OBJECT_TYPES = grammar_data["objects"]
-    SCOPE_DEFINERS = grammar_data["scope_definers"]
-    CONST_TYPES = grammar_data["const_types"]
-    VALID_CONDITION_DATA_TYPES = grammar_data["valid_condition_types"]
-
-START_SYMBOL = "statement"
-
-def get_grammar_rule_name(rule:str):
-    '''Given a rule, return its name from the json file.'''
-    for key in GRAMMAR_RULES:
-        for grammar_rule in GRAMMAR_RULES[key]:
-            if rule == grammar_rule:
-                return key
-    raise Exception("No matching grammar rule.")
-
-class AstNode():
-    '''Abstract Syntax Tree node. Contains operator and child nodes.
-    Attributes:
-        children (list): list of pointers to child nodes, or Tokens.
-        parent (AstNode): parent node
-        operator: a Token or string that is the 'label' of the node, describing the relationship/operation the node represents.'''
-    def __init__(self, operator, parent:"AstNode"=None, children:list=[]):
-        self.parent = parent
-        if type(operator) == Token or type(operator) == str:
-            self.operator = operator
-        else:
-            raise Exception("Operator must be of type Token or str.")
-        self.children = []
-        for node in children:
-            if type(node) == AstNode or type(node) == Token:
-                self.children.append(node)
-                if type(node) == AstNode:
-                    node.parent = self
-            else:
-                raise Exception("Child node must be of type AstNode or Token.")
-    
-    def __str__(self) -> str:
-        output_string = str(self.operator)
-
-        for node in self.children:
-            output_string = output_string + "\n" + str(node)
-        
-        return output_string
+from src.token import Token
+from src.grammar import *
+from src.abstract_syntax_tree import AstNode
 
 class AstGenerator():
     '''Used to generate an Abstract Syntax Tree. Stores a list of tokens and a pointer used to traverse the list.'''

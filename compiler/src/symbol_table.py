@@ -1,4 +1,6 @@
-from src.syntax_analysis import AstNode, Token, SCOPE_DEFINERS, CONST_TYPES
+from src.token import Token
+from src.abstract_syntax_tree import AstNode
+from src.grammar import SCOPE_DEFINERS, CONST_TYPES
 
 class StEntry():
     '''Stores data for an entry in the symbol table dict.

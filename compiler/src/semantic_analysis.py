@@ -1,5 +1,5 @@
 from src.symbol_table import *
-from src.syntax_analysis import OBJECT_TYPES, VALID_CONDITION_DATA_TYPES, SCOPE_DEFINERS
+from src.grammar import OBJECT_TYPES, VALID_CONDITION_DATA_TYPES, SCOPE_DEFINERS
 
 '''This stage is responsible for any remaining checks:
 - type checking: 
