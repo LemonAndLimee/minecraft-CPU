@@ -1,4 +1,4 @@
-from src.token import *
+from lexical_token import *
 
 def get_non_whitespace_tokens(tokens:list[Token]) ->list[Token]:
     '''Takes a list of tokens and returns it without any whitespace tokens.'''

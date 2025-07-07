@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from src.symbol_table import *
+from ..src.symbol_table import *
 
 class TestEntryClasses(unittest.TestCase):
     def test_equality_var_entry(self):

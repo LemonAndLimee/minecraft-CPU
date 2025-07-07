@@ -1,6 +1,6 @@
 import unittest
 
-import src.lexical_analysis as la
+from ..src import lexical_analysis as la
 
 class TestGetTokenType(unittest.TestCase):
     def test_get_token_type_type(self):

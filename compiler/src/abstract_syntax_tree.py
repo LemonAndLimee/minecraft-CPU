@@ -1,4 +1,4 @@
-from src.token import Token
+from lexical_token import Token
 
 class AstNode():
     '''Abstract Syntax Tree node. Contains operator and child nodes.

@@ -1,6 +1,6 @@
-from src.token import Token
-from src.grammar import *
-from src.abstract_syntax_tree import AstNode
+from lexical_token import Token
+from grammar import *
+from abstract_syntax_tree import AstNode
 
 class AstGenerator():
     '''Used to generate an Abstract Syntax Tree. Stores a list of tokens and a pointer used to traverse the list.'''
