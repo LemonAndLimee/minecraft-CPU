@@ -244,6 +244,10 @@
   <ItemGroup>
     <ClCompile Include="Compiler.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Token.h" />
+    <ClInclude Include="TokenTypes.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
