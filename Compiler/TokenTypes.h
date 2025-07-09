@@ -40,16 +40,17 @@ enum TokenType
     SEMICOLON
 };
 
-const std::unordered_map<TokenType, std::string> g_tokenTypesRegex {
+// Contains the exact string matches (if they exist) of token types.
+const std::unordered_map<TokenType, std::string> g_tokenTypesExactMatches {
     { DATA_TYPE, "byte" },
     { ASSIGN, "=" },
-    { BYTE, "[0-9]+" },
+    // BYTE -> Non-exact match
     { IF, "if" },
     { ELSE, "else" },
     { WHILE, "while" },
     { FOR, "for" },
-    { IDENTIFIER, "[a-zA-Z_][a-zA-Z_0-9]*" },
-    { PLUS, "\\+" },
+    // IDENTIFIER -> Non-exact match
+    { PLUS, "+" },
     { MINUS, "-" },
     { MULTIPLY, "*" },
     { DIVIDE, "/" },
@@ -62,12 +63,12 @@ const std::unordered_map<TokenType, std::string> g_tokenTypesRegex {
     { LT, "<" },
     { GT, ">" },
     { NOT, "!" },
-    { OR, "\\|" },
+    { OR, "|" },
     { AND, "&" },
     { LSHIFT, "<<" },
     { RSHIFT, ">>" },
-    { PAREN_OPEN, "\\(" },
-    { PAREN_CLOSE, "\\)" },
+    { PAREN_OPEN, "(" },
+    { PAREN_CLOSE, ")" },
     { BRACE_OPEN, "{" },
     { BRACE_CLOSE, "}" },
     { SEMICOLON, ";" },
