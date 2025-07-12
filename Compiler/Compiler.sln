@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Compiler", "Compiler.vcxproj", "{686B70FB-DDDC-4035-BCDC-E282A4D29CCA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTests", "UnitTests\UnitTests.vcxproj", "{3E13CB5E-CB71-4A37-970A-1E64B4115E9D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{686B70FB-DDDC-4035-BCDC-E282A4D29CCA} = {686B70FB-DDDC-4035-BCDC-E282A4D29CCA}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,11 +27,9 @@ Global
 		{686B70FB-DDDC-4035-BCDC-E282A4D29CCA}.ReleaseWithTests|x64.ActiveCfg = ReleaseWithTests|x64
 		{686B70FB-DDDC-4035-BCDC-E282A4D29CCA}.ReleaseWithTests|x64.Build.0 = ReleaseWithTests|x64
 		{3E13CB5E-CB71-4A37-970A-1E64B4115E9D}.Debug|x64.ActiveCfg = DebugWithTests|x64
-		{3E13CB5E-CB71-4A37-970A-1E64B4115E9D}.Debug|x64.Build.0 = DebugWithTests|x64
 		{3E13CB5E-CB71-4A37-970A-1E64B4115E9D}.DebugWithTests|x64.ActiveCfg = DebugWithTests|x64
 		{3E13CB5E-CB71-4A37-970A-1E64B4115E9D}.DebugWithTests|x64.Build.0 = DebugWithTests|x64
 		{3E13CB5E-CB71-4A37-970A-1E64B4115E9D}.Release|x64.ActiveCfg = ReleaseWithTests|x64
-		{3E13CB5E-CB71-4A37-970A-1E64B4115E9D}.Release|x64.Build.0 = ReleaseWithTests|x64
 		{3E13CB5E-CB71-4A37-970A-1E64B4115E9D}.ReleaseWithTests|x64.ActiveCfg = ReleaseWithTests|x64
 		{3E13CB5E-CB71-4A37-970A-1E64B4115E9D}.ReleaseWithTests|x64.Build.0 = ReleaseWithTests|x64
 	EndGlobalSection

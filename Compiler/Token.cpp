@@ -4,7 +4,7 @@
 
 #include "Token.h"
 
-Token::Token( TokenType type, TokenValue value )
+Token::Token( TokenType type, TokenValue::Ptr value )
   : m_type( type ),
     m_value( value )
 {

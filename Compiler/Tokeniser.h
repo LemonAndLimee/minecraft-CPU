@@ -16,8 +16,8 @@ public:
     using Ptr = std::shared_ptr<Tokeniser>;
     Tokeniser() = default;
 
-    std::vector<Token> ConvertStringToTokens( const std::string& inputString );
+    std::vector<Token::Ptr> ConvertStringToTokens( const std::string& inputString );
 
 protected:
-    std::vector<Token> ConvertSingleLineToTokens( const std::string& inputString );
+    std::vector<Token::Ptr> ConvertSingleLineToTokens( const std::string& inputString );
 };

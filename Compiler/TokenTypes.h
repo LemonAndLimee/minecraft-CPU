@@ -42,7 +42,7 @@ enum TokenType
 
 // Contains the exact string matches (if they exist) of token types.
 const std::unordered_map<TokenType, std::string> g_tokenTypesExactMatches {
-    { DATA_TYPE, "byte" },
+    // DATA_TYPE -> Non-exact match
     { ASSIGN, "=" },
     // BYTE -> Non-exact match
     { IF, "if" },

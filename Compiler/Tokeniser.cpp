@@ -11,12 +11,12 @@
  *
  * \return  A vector of tokens representing the given string.
  */
-std::vector<Token>
+std::vector<Token::Ptr>
 Tokeniser::ConvertStringToTokens(
     const std::string& inputString
 )
 {
-    std::vector<Token> tokens{};
+    std::vector<Token::Ptr> tokens{};
 
     // If string is empty
     if ( inputString.empty() )
@@ -34,12 +34,12 @@ Tokeniser::ConvertStringToTokens(
  *
  * \return  A vector of tokens representing the given string.
  */
-std::vector<Token>
+std::vector<Token::Ptr>
 Tokeniser::ConvertSingleLineToTokens(
     const std::string& inputString
 )
 {
-    std::vector<Token> tokens{};
+    std::vector<Token::Ptr> tokens{};
 
     // If string is empty or commented out, i.e. begins with a //
     if ( inputString.empty() || std::strncmp( inputString.c_str(), "//", 2u ) )
