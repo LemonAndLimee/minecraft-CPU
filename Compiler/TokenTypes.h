@@ -8,6 +8,7 @@ namespace TokenTypes
 
 enum TokenType
 {
+    INVALID_TOKEN, // A non-existent token
     DATA_TYPE,
     ASSIGN,
     BYTE,

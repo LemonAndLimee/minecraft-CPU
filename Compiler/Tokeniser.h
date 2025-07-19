@@ -9,6 +9,8 @@
 #include <vector>
 #include <memory>
 
+using TokensVector = std::vector<Token::Ptr>;
+
 // Class responsible for converting a string into a stream of tokens.
 class Tokeniser
 {
@@ -16,8 +18,14 @@ public:
     using Ptr = std::shared_ptr<Tokeniser>;
     Tokeniser() = default;
 
-    std::vector<Token::Ptr> ConvertStringToTokens( const std::string& inputString );
+    TokensVector ConvertStringToTokens( const std::string& inputString );
+
+    static TokenType GetTokenType( const std::string& tokenString );
+
+    static bool IsWhitespace( const char character );
 
 protected:
-    std::vector<Token::Ptr> ConvertSingleLineToTokens( const std::string& inputString );
+    void ConvertSingleLineAndAppend( const std::string& inputString, TokensVector& tokensVector );
+
+    Token::Ptr GetNextToken( const std::string& inputString, size_t& startIndex );
 };

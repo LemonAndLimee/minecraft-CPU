@@ -140,6 +140,7 @@
     <ClInclude Include="Token.h" />
     <ClInclude Include="Tokeniser.h" />
     <ClInclude Include="TokenTypes.h" />
+    <ClInclude Include="TokenValue.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
