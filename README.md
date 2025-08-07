@@ -50,6 +50,6 @@ BRLT R1, R2, R3     - Branches to instruction at address pointed to by value in 
 The python script schematic_generator.py converts machine code text files to a schematic that can be used by the WorldEdit mod to spawn in the whole program at once, in the form of barrels with various redstone signal strengths. This increases efficiency in testing out programs, as they can be written into the world immediately. To use, run the script on the terminal with the name of the machine code file (omitting the .txt) as an argument. This produces a .schem file in the schematics folder, which can be transferred into the WorldEdit folder in the Minecraft folder to load it into the world.
 
 # Future Work
-On branch "Compiler", there is some work in progress to create a compiler that can convert a custom high-level language into my custom assembly language.
+In the repository https://github.com/LemonAndLimee/compiler-mc-cpu, there is some work in progress to create a compiler that can convert a custom high-level language into my custom assembly language.
 
 At some point I would also like to try connecting "hardware", i.e. other redstone circuits that act as I/O devices, as well as other copies of CPUs, and having them send data.
